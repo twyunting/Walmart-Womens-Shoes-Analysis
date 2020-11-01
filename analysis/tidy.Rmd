@@ -1,0 +1,22 @@
+---
+title: "tidy data"
+author: "Yunting Chiu"
+date: "11/1/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+ws <- read.csv(file = "../data/Datafiniti_Womens_Shoes_Jun19.csv")
+ws
+```
+
+```{r}
+ws %>%
+  select(prices.size)
+```
+

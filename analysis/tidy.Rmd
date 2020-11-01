@@ -12,7 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r}
 library(tidyverse)
 ws <- read.csv(file = "../data/Datafiniti_Womens_Shoes_Jun19.csv")
-ws
+
 ```
 
 ```{r}
@@ -42,6 +42,10 @@ ws %>%
                                    "35" = "5"
                                    ),
          sizesUS = as.numeric(sizesUS)) -> ws
+```
+
+```{r}
+# testing
 ws %>%
   arrange(desc(sizesUS)) %>%
   distinct(sizesUS)

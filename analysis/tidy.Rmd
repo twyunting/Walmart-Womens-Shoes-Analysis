@@ -17,6 +17,33 @@ ws
 
 ```{r}
 ws %>%
-  select(prices.size)
+  select(prices.size) %>%
+  distinct()
+```
+
+```{r}
+ws %>%
+  # select(prices.size) %>%
+  mutate(sizesUS = str_extract(prices.size, "\\d{1,}")) %>%
+  filter(!is.na(sizesUS)) -> ws
+ws %>%
+  distinct(sizesUS) 
+# convert Europe sizes to the US sizes
+ws %>%
+  mutate(sizesUS = recode(sizesUS, "44" = "12",
+                                   "43" = "11",
+                                   "42" = "11",
+                                   "41" = "10", 
+                                   "40" = "9",
+                                   "39" = "8",
+                                   "38" = "7.5",
+                                   "37" = "6.5",
+                                   "36" = "6",
+                                   "35" = "5"
+                                   ),
+         sizesUS = as.numeric(sizesUS)) -> ws
+ws %>%
+  arrange(desc(sizesUS)) %>%
+  distinct(sizesUS)
 ```
 

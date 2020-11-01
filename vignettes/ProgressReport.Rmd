@@ -60,5 +60,7 @@ Write vignette and README. Debug code and finalize Shiny app design. | Yunting C
 Practice for a oral presentation, make sure the app is able to work.| Xubo Tang | 12/8
 
 ## 8. References 
+- EU to US shoe size: Conversion charts for women, men &amp; kids. (n.d.). Retrieved November 01, 2020, from https://www.blitzresults.com/en/shoe-size-euro/
 - Wasserstein, R., & Lazar, N. (2016). The ASA statement on p -Values: Context, Process, and Purpose. *The American Statistician, 70*(2), 129–133. https://doi.org/10.1080/00031305.2016.1154108
 - Women's Shoe Prices - dataset by Datafiniti. (2019, June 25). Retrieved October 26, 2020, from https://data.world/datafiniti/womens-shoe-prices/workspace/file?filename=Datafiniti_Womens_Shoes_Jun19.csv
+

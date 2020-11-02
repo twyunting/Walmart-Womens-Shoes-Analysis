@@ -1,0 +1,99 @@
+---
+title: "Progress Report"
+author: "Yunting Chiu"
+date: "10/26/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+## 1. Shiny App’s title
+The analysis of Walmart Women’s Shoes between March to May 2019
+
+## 2. Group Members and Assigning Roles
+- Jiarong Li
+- Shan Lin
+- Xubo Tang
+- [Yunting Chiu](http://linkedin.com/in/yuntingchiu)
+
+## 3. Our analysis in Shiny App
+With the improvement of women’s economic ability and the variability of fashion demands, women’ shoes have become an important part of the footwear market as their demands for shoes increased. Some problems with meaningful business insights are brought to the attention of related parties, such as analysts, vendors and their customers: What is the average price of each distinct brand? Which brands have the highest prices? Which one has the widest distribution of prices? Is there a typical price distribution (e.g., normal) across brands or within specific brands? Is there an obvious difference in price between online and in store? The Shiny App of this project aimed to answer these questions and is used to determine brand markups, pricing strategies, and trends for luxury shoes.
+
+## 4. Proposed data sources
+The [dataset](https://data.world/datafiniti/womens-shoe-prices/workspace/file?filename=Datafiniti_Womens_Shoes_Jun19.csv) is from the [Data.World](https://data.world/) and created by Datafiniti. The dataset was updated 2019 which is a list of 10,000 women’s shoes in Walmart stores. There are 29 variables which contain price, brand, manufacture, ID, price discount, price size, shoes size, date created, image URL and so on. After going through the dataset, there are some variables that can be analyzed: price, brand, manufacture and price offer. 
+
+```{block}
+There is a second data set that you might be able to use as well. It is unclear how much the data overlaps but it appears to have almost all the same variables and quite different dates so you can increase your data.
+
+```
+
+
+## 5. Concept for the Shiny App
+### Overall Layout
+According to the dataset, we find out some interesting variables. We are able to show the research results that we could derive from the data following the below questions.
+
+- What is the relationship between brand and manufacturer? Are they the same?
+- How do companies price their products? (consider the prices.availability)
+- Should retailers match their own Prices online and in stores? 
+- Which retailer has the most discount?
+```{block}
+Not a lot of detail on the layout which could slow your development.
+I am glad you are asking question but I would suggest more sophisticated ones you can answer with this data.
+
+Try these two:
+1. Can you predict the price of a shoe based on various variables.
+2. Given a model for 1, What shoes are overprice or under priced compared to their equivalents
+
+```
+
+
+### Data Analysis and Visualization with User Choices and Results 
+#### Data Analysis in dataTableOutput:
+- Use the prices.offer variable to compare online prices and in-store prices.
+- Which brand has the highest price, on average.
+- Find out the popular colors of women’s shoes with descending order.
+- Show the relationship between brand and manufacturer (true or false).
+```{block}
+I would rather see distributions statistics instead of just summary statistics
+```
+
+
+#### Data Visualization in plotOutput:
+- Users can choose the retailers to see how they decide the price to women shoes.
+- Choose the important categorical variables to make a barplot function (y axis is count).
+- See whether the quantitative variables follow a normal distribution. 
+  + Before discount prices
+  + After discount  prices
+  
+```{block}
+Recommend Box plots over bar plots to see the distributions of prices based on categories.
+Then allow the users to run a t.test or AOV to see if there is a difference in teh aveage price based on the choices.
+```
+  
+
+## 6. Statistical Modeling with User Choices and Results 
+We initially decided to use regression models, such as decision trees, to help users to analyze. Firstly, we use the quantile method to determine the price level, and then use the decision tree to help us use prices to screen which are luxury goods and which are daily necessities. Secondly, To see whether the quantitative variables follow a normal distribution, we use qqplot. That is, if the median is approximately equal to mean, which is appropriate to use t-procedure to analyze our statistical part. If not, we will suggest users use a non-parametric test to solve their research questions. 
+```{block}
+Suggest you create a tab to answer the questions I posed above. Allow users to select up to five variables for a linear model where they can chose to log variables, if appropriate, to build a linear model where the response variable is price and the others are explanatory variables they can select.
+
+  Allow them to chose to see plots of the residuals from the model at least residuals vs fitted and qq plot for normality
+  
+```
+
+
+## 7. Project Schedule and Responsibilities
+**Worksheets** | **Leader** | **Due Date**
+------------- | ------------- | -------------
+Tidy, clean, and EDA data, find some articles to investigate the price of women shoes in retail stores, on average.| Xubo Tang | 11/3
+Start to build a design framework, input chunks on Shiny app. | Yunting Chiu | 11/10
+Data analysis and Data visualization on Shiny app. Output ggplot and tables. | Shan Lin | 11/17
+Statistical analysis and regression models. Make sure the layouts, controls, and outputs are make senses. | Jiarong Li | 11/24
+Write vignette and README. Debug code and finalize Shiny app design. | Yunting Chiu | 12/1
+Practice for a oral presentation, make sure the app is able to work.| Xubo Tang | 12/8
+
+## 8. References 
+- EU to US shoe size: Conversion charts for women, men &amp; kids. (n.d.). Retrieved November 01, 2020, from https://www.blitzresults.com/en/shoe-size-euro/
+- Wasserstein, R., & Lazar, N. (2016). The ASA statement on p -Values: Context, Process, and Purpose. *The American Statistician, 70*(2), 129–133. https://doi.org/10.1080/00031305.2016.1154108
+- Women's Shoe Prices - dataset by Datafiniti. (2019, June 25). Retrieved October 26, 2020, from https://data.world/datafiniti/womens-shoe-prices/workspace/file?filename=Datafiniti_Womens_Shoes_Jun19.csv
+

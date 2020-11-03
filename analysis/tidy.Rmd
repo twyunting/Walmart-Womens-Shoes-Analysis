@@ -11,16 +11,45 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r}
 library(tidyverse)
-ws <- read.csv(file = "../data/Datafiniti_Womens_Shoes_Jun19.csv")
+ws01 <- read.csv(file = "../data/Datafiniti_Womens_Shoes_Jun19.csv")
+# read other data
+wsOld01 <- read.csv(file = "../data/Datafiniti_Womens_Shoes.csv")
+wsOld02 <- read.csv(file = "../data/7003_1.csv")  
 ```
-- read other datas
+
 ```{r}
-ws02 <- read.csv(file = "../data/Datafiniti_Womens_Shoes.csv")
-ws03 <- read.csv(file = "../data/7003_1.csv")  
+# recheck variables
+# ws02 %>% 
+  # select(which(!(colnames(ws02) %in% colnames(ws01))))
 
 ws %>%
-  bind_rows(ws02) %>%
-  bind_rows(ws03) 
+  select(dateAdded, brand, categories, colors, manufacturer,
+         prices.amountMax, prices.color, 
+         prices.offer, prices.size, sizes,
+         ) -> ws
+
+wsOld01 %>%
+  select(dateAdded, brand, categories, colors, manufacturer,
+         prices.amountMax,  prices.color, 
+         prices.offer, prices.size, sizes,
+         ) -> wsOld01
+  
+wsOld02 %>%
+  select(dateAdded, brand, categories, colors, manufacturer,
+         prices.amountMax,  prices.color, 
+         prices.offer, prices.size, sizes,
+         )  %>%
+  mutate(prices.amountMax = as.numeric(prices.amountMax)
+         ) -> wsOld02
+
+# combined all data
+ws %>%
+bind_rows(wsOld01) %>%
+ bind_rows(wsOld02) -> ws
+
+```
+```{r}
+ws02
 ```
 
 ```{r}

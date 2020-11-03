@@ -12,7 +12,15 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r}
 library(tidyverse)
 ws <- read.csv(file = "../data/Datafiniti_Womens_Shoes_Jun19.csv")
+```
+- read other datas
+```{r}
+ws02 <- read.csv(file = "../data/Datafiniti_Womens_Shoes.csv")
+ws03 <- read.csv(file = "../data/7003_1.csv")  
 
+ws %>%
+  bind_rows(ws02) %>%
+  bind_rows(ws03) 
 ```
 
 ```{r}
@@ -62,5 +70,6 @@ ws %>%
   count(colors) %>%
   arrange(desc(n))
 #color 
+#fct_lump()
 ```
 

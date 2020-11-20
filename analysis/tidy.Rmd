@@ -11,6 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r}
 library(tidyverse)
+library(lubridate)
 ws01 <- read.csv(file = "../data/Datafiniti_Womens_Shoes_Jun19.csv")
 # read other data
 wsOld01 <- read.csv(file = "../data/Datafiniti_Womens_Shoes.csv")
@@ -22,7 +23,7 @@ wsOld02 <- read.csv(file = "../data/7003_1.csv")
 # ws02 %>% 
   # select(which(!(colnames(ws02) %in% colnames(ws01))))
 
-ws %>%
+ws01 %>%
   select(dateAdded, brand, categories, colors, manufacturer,
          prices.amountMax, prices.color, 
          prices.offer, prices.size, sizes,
@@ -30,7 +31,7 @@ ws %>%
 
 wsOld01 %>%
   select(dateAdded, brand, categories, colors, manufacturer,
-         prices.amountMax,  prices.color, 
+         prices.amountMax, prices.color, 
          prices.offer, prices.size, sizes,
          ) -> wsOld01
   
@@ -46,10 +47,6 @@ wsOld02 %>%
 ws %>%
 bind_rows(wsOld01) %>%
  bind_rows(wsOld02) -> ws
-
-```
-```{r}
-ws02
 ```
 
 ```{r}
@@ -67,7 +64,10 @@ ws %>%
   distinct(sizesUS) 
 # convert Europe sizes to the US sizes
 ws %>%
-  mutate(sizesUS = recode(sizesUS, "44" = "12",
+  separate(dateAdded, into = c("date", "time"), sep = "T") %>%
+  mutate(date = ymd(date),
+         time = hms(time),
+         sizesUS = recode(sizesUS, "44" = "12",
                                    "43" = "11",
                                    "42" = "11",
                                    "41" = "10", 
@@ -76,9 +76,9 @@ ws %>%
                                    "38" = "7.5",
                                    "37" = "6.5",
                                    "36" = "6",
-                                   "35" = "5"
-                                   ),
-         sizesUS = as.numeric(sizesUS)) -> ws
+                                   "35" = "5"),
+         sizesUS = as.numeric(sizesUS)
+         ) -> ws
 ```
 
 ```{r}

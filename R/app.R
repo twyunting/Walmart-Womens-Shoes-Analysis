@@ -5,11 +5,12 @@ library(tidyverse)
 library(broom)
 library(lubridate)
 
-## 1. download and clean data
+# download data
 ws1 <- read_csv(file = "../data/Datafiniti_Womens_Shoes_Jun19.csv")
-# read other data
 ws2 <- read_csv(file = "../data/Datafiniti_Womens_Shoes.csv")
 ws3 <- read_csv(file = "../data/7003_1.csv")  
+
+# clean and tidy
 ws1 %>%
     select(dateAdded, brand, categories, colors, manufacturer,
            prices.amountMax, prices.color, 
@@ -30,17 +31,14 @@ ws3 %>%
     mutate(prices.amountMax = as.numeric(prices.amountMax)
     ) -> ws3
 
-# combine all data
+# combined all data
 ws1 %>%
     bind_rows(ws2) %>%
     bind_rows(ws3) -> ws
-# uniform `prices.size` to the US size
+
 ws %>%
     # convert Europe sizes to the US sizes
-    mutate(sizesUS = str_extract(prices.size, "\\d{1,}")) %>%
-    separate(dateAdded, into = c("date", "time"), sep = "T") %>%
-    mutate(date = ymd(date),
-           time = hms(time),
+    mutate(sizesUS = str_extract(prices.size, "\\d{1,}"),
            sizesUS = recode(sizesUS, "44" = "12",
                             "43" = "11",
                             "42" = "11",
@@ -51,8 +49,18 @@ ws %>%
                             "37" = "6.5",
                             "36" = "6",
                             "35" = "5"),
-           sizesUS = as.numeric(sizesUS)
+           sizesUS = as.numeric(sizesUS)) %>%
+    # time 
+    separate(dateAdded, into = c("date", "time"), sep = " ") %>%
+    mutate(date = ymd(date),
+           time = hms(time),
+    # add discount price (% off) and calculate after discounted prices
+           discount = (str_extract(prices.offer, "\\d{1,}")),
+           discount = case_when(is.na(discount) ~ 100,
+                                TRUE ~ as.numeric(discount)),
+           prices.discounted =  prices.amountMax*(discount/100)
     ) -> ws
+
 
 ui <- fluidPage(
     titlePanel("The analysis of Walmart Women’s Shoes ", 

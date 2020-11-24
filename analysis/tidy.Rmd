@@ -70,6 +70,34 @@ ws %>%
          prices.discounted =  prices.amountMax*(discount/100)
          ) %>%
   select(-sizes, -prices.size) -> ws
+
+
+```
+- guiding how to filter out the year
+```{r}
+# 2014
+ws %>%
+  filter(date < parse_date("2015", format = "%Y"))
+
+# 2015
+ws %>%
+  filter(date >= parse_date("2015", format = "%Y") & date < parse_date("2016", format = "%Y"))
+
+# 2016
+ws %>%
+  filter(date >= parse_date("2016", format = "%Y") & date < parse_date("2017", format = "%Y"))
+
+# 2017
+ws %>%
+  filter(date >= parse_date("2017", format = "%Y") & date < parse_date("2018", format = "%Y"))
+
+# 2018
+ws %>%
+  filter(date >= parse_date("2018", format = "%Y") & date < parse_date("2019", format = "%Y"))
+
+# 2019
+ws %>%
+  filter(date >= parse_date("2019", format = "%Y"))
 ```
 
 ```{r}

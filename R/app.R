@@ -36,13 +36,8 @@ ws1 %>%
     bind_rows(ws3) -> ws
 # uniform `prices.size` to the US size
 ws %>%
-    
+    # convert Europe sizes to the US sizes
     mutate(sizesUS = str_extract(prices.size, "\\d{1,}")) %>%
-    filter(!is.na(sizesUS)) -> ws
-ws %>%
-    distinct(sizesUS) 
-# convert Europe sizes to the US sizes
-ws %>%
     separate(dateAdded, into = c("date", "time"), sep = "T") %>%
     mutate(date = ymd(date),
            time = hms(time),

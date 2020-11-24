@@ -1,5 +1,5 @@
 # The analysis of Walmart Women’s Shoes 
-## 0. libraries
+# installing libraries
 library(shiny)
 library(tidyverse)
 library(broom)
@@ -54,12 +54,13 @@ ws %>%
     separate(dateAdded, into = c("date", "time"), sep = " ") %>%
     mutate(date = ymd(date),
            time = hms(time),
-    # add discount price (% off) and calculate after discounted prices
+           # add discount price (% off) and calculate after discounted prices
            discount = (str_extract(prices.offer, "\\d{1,}")),
            discount = case_when(is.na(discount) ~ 100,
                                 TRUE ~ as.numeric(discount)),
            prices.discounted =  prices.amountMax*(discount/100)
-    ) -> ws
+    ) %>%
+    select(-sizes, -prices.size) -> ws
 
 
 ui <- fluidPage(

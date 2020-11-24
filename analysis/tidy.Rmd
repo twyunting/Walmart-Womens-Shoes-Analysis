@@ -69,11 +69,11 @@ ws %>%
   separate(dateAdded, into = c("date", "time"), sep = " ") %>%
   mutate(date = ymd(date),
          time = hms(time),
-# add discount price (% off) and calculate
+# add discount price (% off) and calculate after discounted prices
          discount = (str_extract(prices.offer, "\\d{1,}")),
          discount = case_when(is.na(discount) ~ 100,
                                       TRUE ~ as.numeric(discount)),
-         price.discounted =  prices.amountMax*(discount/100)
+         prices.discounted =  prices.amountMax*(discount/100)
          )-> ws
 ```
 

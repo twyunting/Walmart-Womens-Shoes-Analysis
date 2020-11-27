@@ -64,81 +64,86 @@ ws %>%
 
 
 ui <- fluidPage(
-    titlePanel("The analysis of Walmart Women’s Shoes ", 
-               windowTitle = "The analysis of Walmart Women’s Shoes"),
-    sidebarLayout(
-        sidebarPanel(
-            selectInput("outcome", label = h3("Outcome"),
-                        choices = list("Fertility" = "Fertility",
-                                       "Agriculture" = "Agriculture",
-                                       "Examination" = "Examination",
-                                       "Education" = "Education",
-                                       "Catholic" = "Catholic",
-                                       "Infant.Mortality" = "Infant.Mortality"), selected = 1),
-            
-            selectInput("indepvar", label = h3("Explanatory variable"),
-                        choices = list("Fertility" = "Fertility",
-                                       "Agriculture" = "Agriculture",
-                                       "Examination" = "Examination",
-                                       "Education" = "Education",
-                                       "Catholic" = "Catholic",
-                                       "Infant.Mortality" = "Infant.Mortality"), selected = 1)
-            
-        ),
-        
-        mainPanel(
-            
-            tabsetPanel(type = "tabs",
-                        
-                        tabPanel("Scatterplot", plotOutput("scatterplot")), # Plot
-                        tabPanel("Distribution", # Plots of distributions
-                                 fluidRow(
-                                     column(6, plotOutput("distribution1")),
-                                     column(6, plotOutput("distribution2")))
-                        ),
-                        tabPanel("Model Summary", verbatimTextOutput("summary")), # Regression output
-                        tabPanel("Data", DT::dataTableOutput('tbl')) # Data as datatable
-                        
-            )
-        )
-    ))
-
+    titlePanel("The analysis of Walmart Women’s Shoes", 
+               windowTitle = "The analysis of Walmart Women’s Shoes "),
+    tabsetPanel(type = "tabs",
+                tabPanel("Regression",
+                         sidebarLayout(
+                             sidebarPanel(
+                                 varSelectInput("var2X", "X Variable?",
+                                                data = ws, selected = "discount"),
+                                 checkboxInput("log2X", "Log_Transform?"),
+                                 varSelectInput("var2Y", "Y Variable?",
+                                                data = ws, selected = "prices.discounted"),
+                                 checkboxInput("log2Y", "Log_Transform?"),
+                                 checkboxInput("OLS", "Fit OLS?")
+                             ),
+                             mainPanel(plotOutput("plot2")
+                             )#sidebarPanel
+                         )#sidebarLayout
+                ), # tabPanel
+                tabPanel("SpreadSheet",
+                         dataTableOutput("sheets")
+                )# tabPanel
+    ),# tabsetPanel
+    
+    fluidRow(title = "Outputs",
+             column(4,
+                    verbatimTextOutput("lm")
+             ),
+             column(4,
+                    plotOutput("residual")
+             ),
+             column(4,
+                    plotOutput("qq")
+             )
+             
+    ) #fluidRow
+    
+)#fluidPage
 
 
 # SERVER
 server <- function(input, output) {
+   
+    # extra credit - output
     
-    # Regression output
-    output$summary <- renderPrint({
-        fit <- lm(swiss[,input$outcome] ~ swiss[,input$indepvar])
-        names(fit$coefficients) <- c("Intercept", input$var2)
-        summary(fit)
-    })
+    output$lm <- renderPrint({
+        if(is.numeric(ws[[input$var2X]]) & 
+           is.numeric(ws[[input$var2Y]]) &
+           input$OLS){
+            summary(lm(log(ws[[input$var2Y]]) ~ log(ws[[input$var2X]])))
+        }
+    })#renderPrint
     
-    # Data output
-    output$tbl = DT::renderDataTable({
-        DT::datatable(swiss, options = list(lengthChange = FALSE))
-    })
+    output$residual <- renderPlot({
+        if(is.numeric(ws[[input$var2X]]) & 
+           is.numeric(ws[[input$var2Y]]) &
+           input$OLS){
+            model <- augment(lm(log(ws[[input$var2Y]]) ~ log(ws[[input$var2X]])))
+            model %>%
+                ggplot(aes(x = .fitted, y = .resid)) + 
+                geom_point() +
+                labs(title = "Residuals vs Fitted",
+                     x = "x",
+                     y = "y")
+        }
+    })#renderPlot
     
+    output$qq <- renderPlot({
+        if(is.numeric(ws[[input$var2X]]) & 
+           is.numeric(ws[[input$var2Y]]) &
+           input$OLS){
+            model <- augment(lm(log(ws[[input$var2Y]]) ~ log(ws[[input$var2X]])))
+            model %>%
+                ggplot() + 
+                ggtitle("QQ Plot") +
+                geom_qq(aes(sample = .resid)) +
+                geom_qq_line(aes(sample = .resid))
+        }
+    })# renderPlot
     
-    # Scatterplot output
-    output$scatterplot <- renderPlot({
-        plot(swiss[,input$indepvar], swiss[,input$outcome], main="Scatterplot",
-             xlab=input$indepvar, ylab=input$outcome, pch=19)
-        abline(lm(swiss[,input$outcome] ~ swiss[,input$indepvar]), col="red")
-        lines(lowess(swiss[,input$indepvar],swiss[,input$outcome]), col="blue")
-    }, height=400)
+}# server 
     
-    
-    # Histogram output var 1
-    output$distribution1 <- renderPlot({
-        hist(swiss[,input$outcome], main="", xlab=input$outcome)
-    }, height=300, width=300)
-    
-    # Histogram output var 2
-    output$distribution2 <- renderPlot({
-        hist(swiss[,input$indepvar], main="", xlab=input$indepvar)
-    }, height=300, width=300)
-}
 
 shinyApp(ui = ui, server = server)

@@ -64,9 +64,10 @@ ws %>%
     select(-sizes, -prices.size) -> ws
 
 
-ui <- fluidPage(theme = shinytheme("united"),
-    titlePanel("The analysis of Walmart Women’s Shoes", 
-               windowTitle = "The analysis of Walmart Women’s Shoes "),
+ui <- fluidPage(
+    navbarPage("The analysis of Walmart Women’s Shoes",
+               windowTitle = "The analysis of Walmart Women’s Shoes",
+               theme = shinytheme("united")),
     tabsetPanel(type = "tabs",
                 tabPanel("Regression",
                          sidebarLayout(

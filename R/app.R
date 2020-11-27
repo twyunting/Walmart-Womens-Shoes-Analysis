@@ -4,6 +4,7 @@ library(shiny)
 library(tidyverse)
 library(broom)
 library(lubridate)
+library(shinythemes)
 
 # download data
 ws1 <- read_csv(file = "../data/Datafiniti_Womens_Shoes_Jun19.csv")
@@ -63,7 +64,7 @@ ws %>%
     select(-sizes, -prices.size) -> ws
 
 
-ui <- fluidPage(
+ui <- fluidPage(theme = shinytheme("united"),
     titlePanel("The analysis of Walmart Women’s Shoes", 
                windowTitle = "The analysis of Walmart Women’s Shoes "),
     tabsetPanel(type = "tabs",

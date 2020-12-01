@@ -107,9 +107,7 @@ ui <- fluidPage(
 
 # SERVER
 server <- function(input, output) {
-   
-    # extra credit - output
-    
+
     output$lm <- renderPrint({
         if(is.numeric(ws[[input$var2X]]) & 
            is.numeric(ws[[input$var2Y]]) &

@@ -71,33 +71,79 @@ ws %>%
          ) %>%
   select(-sizes, -prices.size) -> ws
 
+ws %>%
+  select(date, prices.amountMax, prices.discounted) %>%
+  rename("origPrices" = "prices.amountMax",
+         "discPrices" = "prices.discounted") %>%
+  mutate(Year = str_extract(date, "\\d\\d\\d\\d")) %>%
+  filter(!is.na(origPrices)) -> wsRegression
 
+wsRegression 
 ```
 - guiding how to filter out the year
 ```{r}
+#filter out the year
 # 2014
 ws %>%
-  filter(date < parse_date("2015", format = "%Y"))
+  filter(date < parse_date("2015", format = "%Y")) %>%
+  select(prices.amountMax, prices.discounted) %>%
+  rename("14origPrices" = "prices.amountMax",
+         "14discPrices" = "prices.discounted") -> ws2014
 
 # 2015
 ws %>%
-  filter(date >= parse_date("2015", format = "%Y") & date < parse_date("2016", format = "%Y"))
+  filter(date >= parse_date("2015", format = "%Y") & date < parse_date("2016", format = "%Y")) %>%
+  select(prices.amountMax, prices.discounted) %>%
+  rename("origPrices15" = "prices.amountMax",
+         "discPrices15" = "prices.discounted") %>%
+  arrange(desc(origPrices15)) %>%
+  head(500) -> ws2015
 
 # 2016
 ws %>%
-  filter(date >= parse_date("2016", format = "%Y") & date < parse_date("2017", format = "%Y"))
+  filter(date >= parse_date("2016", format = "%Y") & date < parse_date("2017", format = "%Y")) %>%
+  select(prices.amountMax, prices.discounted) %>%
+  rename("origPrices16" = "prices.amountMax",
+         "discPrices16" = "prices.discounted") %>%
+  arrange(desc(origPrices16)) %>%
+  head(500) -> ws2016
 
 # 2017
 ws %>%
-  filter(date >= parse_date("2017", format = "%Y") & date < parse_date("2018", format = "%Y"))
+  filter(date >= parse_date("2017", format = "%Y") & date < parse_date("2018", format = "%Y")) %>%
+  select(prices.amountMax, prices.discounted) %>%
+  rename("origPrices17" = "prices.amountMax",
+         "discPrices17" = "prices.discounted") %>%
+  arrange(desc(origPrices17)) %>%
+  head(500) -> ws2017
 
 # 2018
 ws %>%
-  filter(date >= parse_date("2018", format = "%Y") & date < parse_date("2019", format = "%Y"))
+  filter(date >= parse_date("2018", format = "%Y") & date < parse_date("2019", format = "%Y")) %>%
+  select(prices.amountMax, prices.discounted) %>%
+  rename("origPrices18" = "prices.amountMax",
+         "discPrices18" = "prices.discounted") %>%
+  arrange(desc(origPrices18)) %>%
+  head(500) -> ws2018
 
 # 2019
 ws %>%
-  filter(date >= parse_date("2019", format = "%Y"))
+  filter(date >= parse_date("2019", format = "%Y")) %>%
+  select(prices.amountMax, prices.discounted) %>%
+  rename("origPrices19" = "prices.amountMax",
+         "discPrices19" = "prices.discounted") %>%
+  arrange(desc(origPrices19)) %>%
+  head(500) -> ws2019
+
+ws2015 %>%
+  bind_cols(ws2016, ws2017, ws2018, ws2019) -> prices
+
+
+```
+```{r}
+aa <- t.test(prices$discPrices15, prices$discPrices16)
+aa
+  broom::tidy(aa) 
 ```
 
 ```{r}

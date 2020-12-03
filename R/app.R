@@ -134,7 +134,7 @@ ui <- fluidPage(
                theme = shinytheme("united")),
     tabsetPanel(type = "tabs",
                 tabPanel("Statistical Models",
-                         helpText("This tab panel is showing up top 500 women's shoes ranked by prices in 2015~2019."),
+                         helpText("This tab panel is showing up top 500 women's shoes ranked by price descending order in 2015~2019."),
                          sidebarLayout(
                              sidebarPanel(
                                  varSelectInput("var2X", "X - prices of this year",
@@ -403,7 +403,7 @@ server <- function(input, output) {
             model <- augment(lm(prices[[input$var2Y]] ~ prices[[input$var2X]]))
             model %>%
                 ggplot() + 
-                ggtitle("Normal QQ Plot") +
+                ggtitle("Normal QQ Plot of Residuals") +
                 geom_qq(aes(sample = .resid)) +
                 geom_qq_line(aes(sample = .resid))
         }

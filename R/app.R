@@ -138,13 +138,12 @@ ui <- fluidPage(
                          sidebarLayout(
                              sidebarPanel(
                                  varSelectInput("var2X", "X year prices",
-                                                data = prices, selected = 1),
-                                 checkboxInput("log2X", "Log_Transform?"),
+                                                data = prices, selected = "origPrices19"),
                                  varSelectInput("var2Y", "Y year prices?",
-                                                data = prices, selected = 2),
-                                 checkboxInput("log2Y", "Log_Transform?"),
-                                 actionButton("t", "t-procedures", icon = NULL),
-                                 actionButton("slr", "SLR model", icon = NULL),
+                                                data = prices, selected = "discPrices19"),
+                                 checkboxInput("log", "Log Transformation"),
+                                 checkboxInput("t", "t-procedures"),
+                                 checkboxInput("slr", "Simple linear regression"),
                                  tableOutput("eda"),
                                  width = 10
                              ),
@@ -181,12 +180,12 @@ server <- function(input, output) {
     
     output$eda <- renderTable({
        stopifnot(is.numeric(prices[[input$var2X]]) & is.numeric(prices[[input$var2Y]]))
-        if(input$log2X & input$log2Y){
+        if(input$log){
             prices %>%
                 select(input$var2X, input$var2Y) %>% 
                 log() %>%
                 tidy(favstats())
-        }else if(!input$log2X & !input$log2Y){
+        }else if(!input$log){
             prices %>%
                 select(input$var2X, input$var2Y) %>% 
                 tidy(favstats())
@@ -199,7 +198,7 @@ server <- function(input, output) {
     output$ttest <- renderTable({
         stopifnot(is.numeric(prices[[input$var2X]]) & is.numeric(prices[[input$var2Y]]))
        if(input$t){
-            if(input$log2X & input$log2Y){
+            if(input$log){
                 prices %>%
                    select(input$var2X, input$var2Y) %>% 
                     log() %>%
@@ -209,7 +208,7 @@ server <- function(input, output) {
                     select("T-statistic" = statistic, "DF" = parameter,
                            "P-value" = p.value, "Estimate" = estimate,
                            "95 % Lower" = conf.low, "95 % Upper" = conf.high)
-            }else if(!input$log2X & !input$log2Y){
+            }else if(!input$log){
                 prices %>%
                    select(input$var2X, input$var2Y) %>% 
                    t.test(alternative = "two.sided", 
@@ -227,7 +226,7 @@ server <- function(input, output) {
     output$SLRplot <- renderPlot({
         stopifnot(is.numeric(prices[[input$var2X]]) & is.numeric(prices[[input$var2Y]]))
         pl2 <- ggplot(prices, aes(x = !!input$var2X, y = !!input$var2Y))
-            if(input$slr & input$log2X & input$log2Y){
+            if(input$slr & input$log){
                     pl2 <- pl2 + 
                         geom_point() +
                         scale_x_log10() +
@@ -253,8 +252,7 @@ server <- function(input, output) {
         if(is.numeric(prices[[input$var2X]]) & 
            is.numeric(prices[[input$var2Y]]) &
            input$slr &
-           input$log2X &
-           input$log2Y){
+           input$log){
             summary(lm(log(prices[[input$var2Y]]) ~ log(prices[[input$var2X]])))
         }else if(is.numeric(prices[[input$var2X]]) & 
                  is.numeric(prices[[input$var2Y]]) &
@@ -264,15 +262,14 @@ server <- function(input, output) {
     })#renderPrint
     
     output$residual <- renderPlot({
-        if(is.numeric(prices[[prices$var2X]]) & 
-           is.numeric(prices[[prices$var2Y]]) &
+        if(is.numeric(prices[[input$var2X]]) & 
+           is.numeric(prices[[input$var2Y]]) &
            input$slr &
-           input$log2X &
-           input$log2Y){
+           input$log){
             model <- augment(lm(log(prices[[input$var2Y]]) ~ log(prices[[input$var2X]])))
             model %>%
                 ggplot() + 
-                geom_point(aes(x = !!.fitted, y = !!.resid)) +
+                geom_point(aes(x = .fitted, y = .resid)) +
                 labs(title = "Residuals vs Fitted",
                      x = "fitted values",
                      y = "residuals")
@@ -280,12 +277,11 @@ server <- function(input, output) {
         }else if(is.numeric(prices[[input$var2X]]) & 
                  is.numeric(prices[[input$var2Y]]) &
                  input$slr &
-                 !input$log2X &
-                 !input$log2Y){
+                 !input$log){
             model <- augment(lm(prices[[input$var2Y]] ~ prices[[input$var2X]]))
             model %>%
                 ggplot() + 
-                geom_point(aes(x = !!.fitted, y = !!.resid)) +
+                geom_point(aes(x = .fitted, y = .resid)) +
                 labs(title = "Residuals vs Fitted",
                      x = "fitted values",
                      y = "residuals")
@@ -296,8 +292,7 @@ server <- function(input, output) {
         if(is.numeric(prices[[input$var2X]]) & 
            is.numeric(prices[[input$var2Y]]) &
            input$slr &
-           input$log2X &
-           input$log2Y){
+           input$log){
             model <- augment(lm(log(prices[[input$var2Y]]) ~ log(prices[[input$var2X]])))
             model %>%
                 ggplot() + 

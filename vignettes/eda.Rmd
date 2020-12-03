@@ -1,0 +1,7 @@
+---
+title: "EDA"
+author: "Yunting Chiu"
+date: "12/3/2020"
+output: pdf_document
+---
+### Exploratory Data Analysis

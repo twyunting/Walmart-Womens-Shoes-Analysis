@@ -161,6 +161,23 @@ tidy(favstats(prices$discPrices15, prices$discPrices16))
 ```
 
 ```{r}
+prices %>%
+    ggplot() +
+    geom_histogram(aes(discPrices15)) +
+    geom_histogram(aes(origPrices16)) 
+prices %>%
+  gather(key = discPrices15, value = origPrices16) %>% 
+  ggplot(aes(x = origPrices16,fill= discPrices15)) + 
+  geom_histogram(position="dodge")
+
+par(mfrow=c(2,1)) # allows us to put two plots together stacked 
+# the (2,1) means 2 rows and 1 column of plots
+hist(prices$discPrices15,col="dark orange",main="brain volume unaffected",xlab='brain volume')
+hist(prices$discPrices15,col="tomato",main="brain volume affected",xlab='brain volume')
+
+```
+
+```{r}
 #ws %>%
   #mutate(free.shipping = ifelse(str_length(prices.shipping) > 0, "NotFree", "Free"))%>%
   #separate(col = prices.offer, into = c("channel", "discount"), sep = ":")%>%

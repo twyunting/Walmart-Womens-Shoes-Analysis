@@ -134,22 +134,23 @@ ui <- fluidPage(
                theme = shinytheme("united")),
     tabsetPanel(type = "tabs",
                 tabPanel("Statistical Models",
-                         helpText("This tab panel is suppose to campare the most 500 expensives women shoes's prices in 2015-2019"),
+                         helpText("This tab panel is showing up top 500 women's shoes ranked by prices in 2015~2019."),
                          sidebarLayout(
                              sidebarPanel(
-                                 varSelectInput("var2X", "X year prices",
+                                 varSelectInput("var2X", "X - prices of this year",
                                                 data = prices, selected = "origPrices19"),
-                                 varSelectInput("var2Y", "Y year prices?",
+                                 varSelectInput("var2Y", "Y - prices of this year",
                                                 data = prices, selected = "discPrices19"),
                                  checkboxInput("log", "Log Transformation"),
                                  checkboxInput("t", "t-procedures"),
                                  checkboxInput("slr", "Simple Linear Regression"),
+                                 includeMarkdown("../vignettes/eda.rmd"),
                                  tableOutput("eda"),
-                                 width = 10
+                                 includeMarkdown("../vignettes/assumptions.rmd"),
+                                 width = 12
                              ),
                              mainPanel(
                                  tableOutput("ttest"),
-                                 plotOutput("SLRplot"), 
                                  width = 12
                              )#sidebarPanel
                          )#sidebarLayout
@@ -160,6 +161,21 @@ ui <- fluidPage(
     ),# tabsetPanel
     
     fluidRow(title = "Outputs",
+             column(3,
+                    plotOutput("hisX")
+             ),
+             column(3,
+                    plotOutput("hisY")
+             ),
+             column(3,
+                    plotOutput("qqX")
+             ),
+             column(3,
+                    plotOutput("qqY")
+             ),
+             column(12,
+                    plotOutput("SLRplot")
+             ),
              column(4,
                     verbatimTextOutput("lm")
              ),
@@ -197,6 +213,7 @@ server <- function(input, output) {
     
     output$ttest <- renderTable({
         stopifnot(is.numeric(prices[[input$var2X]]) & is.numeric(prices[[input$var2Y]]))
+       # specify_decimal <- function(x, k) trimws(format(round(x, k), nsmall=k))
        if(input$t){
             if(input$log){
                 prices %>%
@@ -221,6 +238,87 @@ server <- function(input, output) {
        }
     })# renderTable 
     
+    output$hisX <- renderPlot({
+      stopifnot(is.numeric(prices[[input$var2X]]) & is.numeric(prices[[input$var2Y]]))
+      if(input$t){
+        if(input$log){
+          ggplot(data = prices ,aes(x = !!input$var2X)) +
+            geom_histogram() +
+            scale_x_log10() +
+            theme_bw() +
+            ggtitle("Find the Normality of a Histogram")
+        }else if(!input$log){
+          ggplot(data = prices ,aes(x = !!input$var2X)) +
+            geom_histogram() +
+            theme_bw() +
+            ggtitle("Find the Normality of a Histogram")
+        }
+      }
+    })# renderTable 
+    
+    output$hisY <- renderPlot({
+      stopifnot(is.numeric(prices[[input$var2X]]) & is.numeric(prices[[input$var2Y]]))
+      if(input$t){
+        if(input$log){
+          ggplot(data = prices ,aes(x = !!input$var2Y)) +
+            geom_histogram() +
+            scale_x_log10() +
+            theme_bw() +
+            ggtitle("Find the Normality of a Histogram")
+        }else if(!input$log){
+          ggplot(data = prices ,aes(x = !!input$var2Y)) +
+            geom_histogram() +
+            theme_bw() +
+            ggtitle("Find the Normality of a Histogram")
+        }
+      }
+    })# renderTable 
+    
+    output$qqX <- renderPlot({
+      stopifnot(is.numeric(prices[[input$var2X]]) & is.numeric(prices[[input$var2Y]]))
+      if(input$t){
+        if(input$log){
+          prices %>%
+          ggplot() + 
+            ggtitle("Checking Normality for X-variable with Log") +
+            geom_qq(aes(sample = !!input$var2X)) +
+            geom_qq_line(aes(sample = !!input$var2X)) +
+            scale_x_log10() +
+            theme_bw()
+        }else if(!input$log){
+          prices %>%
+          ggplot() + 
+          ggtitle("Checking Normality for X-variable") +
+            geom_qq(aes(sample = !!input$var2X)) +
+            geom_qq_line(aes(sample = !!input$var2X)) +
+            theme_bw()
+        }
+      }
+    })# renderTable 
+    
+    output$qqY <- renderPlot({
+      stopifnot(is.numeric(prices[[input$var2X]]) & is.numeric(prices[[input$var2Y]]))
+      if(input$t){
+        if(input$log){
+          prices %>%
+          ggplot() + 
+            ggtitle("Checking Normality for Y-variable with Log") +
+            geom_qq(aes(sample = !!input$var2Y)) +
+            geom_qq_line(aes(sample = !!input$var2Y)) +
+            scale_x_log10() +
+            theme_bw()
+        }else if(!input$log){
+          prices %>%
+          ggplot() + 
+          ggtitle("Checking Normality for Y-variable") +
+            geom_qq(aes(sample = !!input$var2Y)) +
+            geom_qq_line(aes(sample = !!input$var2Y)) +
+            theme_bw() 
+        }
+      }
+    })# renderTable 
+
+########################### simple Linear regression ################################################    
     output$SLRplot <- renderPlot({
         stopifnot(is.numeric(prices[[input$var2X]]) & is.numeric(prices[[input$var2Y]]))
             if(input$slr & input$log){
@@ -230,16 +328,19 @@ server <- function(input, output) {
                         scale_y_log10() +
                         geom_smooth(method = lm, se = FALSE) +
                         labs(x = paste("Log(",input$var2X,")")) +
-                        labs(y = paste("Log(",input$var2Y,")"))
+                        labs(y = paste("Log(",input$var2Y,")"),
+                             title = "Scatter Plot")
                 }else if(input$slr){
                 ggplot(prices, aes(x = !!input$var2X, y = !!input$var2Y)) + 
                         geom_point() +
-                        geom_smooth(method = lm, se = FALSE)
+                        geom_smooth(method = lm, se = FALSE) +
+                        ggtitle("Scatter Plot")
                 }
             })# renderPlot 
       
     output$sheets <- renderDataTable({
-        keep(ws, ~ typeof(.) == "double")
+      ws
+       # keep(ws, ~ typeof(.) == "double")
         
     })# renderDataTable
     
@@ -268,8 +369,8 @@ server <- function(input, output) {
                 ggplot() + 
                 geom_point(aes(x = .fitted, y = .resid)) +
                 labs(title = "Residuals vs Fitted",
-                     x = "fitted values",
-                     y = "residuals")
+                     x = "Fitted Values",
+                     y = "Residuals")
             
         }else if(is.numeric(prices[[input$var2X]]) & 
                  is.numeric(prices[[input$var2Y]]) &
@@ -280,8 +381,8 @@ server <- function(input, output) {
                 ggplot() + 
                 geom_point(aes(x = .fitted, y = .resid)) +
                 labs(title = "Residuals vs Fitted",
-                     x = "fitted values",
-                     y = "residuals")
+                     x = "Fitted Values",
+                     y = "Residuals")
         }
     })#renderPlot
     

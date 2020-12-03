@@ -64,12 +64,6 @@ ws %>%
     ) %>%
     select(-sizes, -prices.size) -> ws
 
-ws %>%
-    select(date, prices.amountMax, prices.discounted) %>%
-    rename("origPrices" = "prices.amountMax",
-           "discPrices" = "prices.discounted") %>%
-    mutate(Year = str_extract(date, "\\d\\d\\d\\d")) %>%
-    filter(!is.na(origPrices)) -> wsRegression
 
 #filter out the year
 # 2014
@@ -131,10 +125,11 @@ ws2015 %>%
 ui <- fluidPage(
     navbarPage("The analysis of Walmart Women’s Shoes",
                windowTitle = "The analysis of Walmart Women’s Shoes",
-               theme = shinytheme("united")),
+               theme = shinytheme("cerulean")),
     tabsetPanel(type = "tabs",
                 tabPanel("Statistical Models",
-                         helpText("This tab panel is showing up top 500 women's shoes ranked by price descending order in 2015~2019."),
+                         helpText("This tab panel is showing up top the 500 women's shoes ranked by price descending order in 2015~2019."),
+                         helpText("origPricesXX is means original prices for women's shoes in this year; disPricesXX is means discounted prices for women's shoes in this year. e.g. discPrices16 is discoun ted prices in 2016"),
                          sidebarLayout(
                              sidebarPanel(
                                  varSelectInput("var2X", "X - prices of this year",
@@ -142,7 +137,7 @@ ui <- fluidPage(
                                  varSelectInput("var2Y", "Y - prices of this year",
                                                 data = prices, selected = "discPrices19"),
                                  checkboxInput("log", "Log Transformation"),
-                                 checkboxInput("t", "t-procedures"),
+                                 checkboxInput("t", "T-Procedures"),
                                  checkboxInput("slr", "Simple Linear Regression"),
                                  includeMarkdown("../vignettes/eda.rmd"),
                                  tableOutput("eda"),
@@ -155,7 +150,7 @@ ui <- fluidPage(
                              )#sidebarPanel
                          )#sidebarLayout
                 ), # tabPanel
-                tabPanel("SpreadSheet",
+                tabPanel("Dataset",
                          dataTableOutput("sheets")
                 )# tabPanel
     ),# tabsetPanel
@@ -394,7 +389,7 @@ server <- function(input, output) {
             model <- augment(lm(log(prices[[input$var2Y]]) ~ log(prices[[input$var2X]])))
             model %>%
                 ggplot() + 
-                ggtitle("Normal QQ Plot") +
+                ggtitle("Normal QQ Plot of Residuals") +
                 geom_qq(aes(sample = .resid)) +
                 geom_qq_line(aes(sample = .resid))
         }else if(is.numeric(prices[[input$var2X]]) & 

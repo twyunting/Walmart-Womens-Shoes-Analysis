@@ -178,6 +178,13 @@ hist(prices$discPrices15,col="tomato",main="brain volume affected",xlab='brain v
 ```
 
 ```{r}
+tidyShoes <- function(x){
+  
+  
+}
+```
+
+```{r}
 #ws %>%
   #mutate(free.shipping = ifelse(str_length(prices.shipping) > 0, "NotFree", "Free"))%>%
   #separate(col = prices.offer, into = c("channel", "discount"), sep = ":")%>%

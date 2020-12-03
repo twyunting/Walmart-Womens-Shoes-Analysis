@@ -133,8 +133,8 @@ ui <- fluidPage(
                windowTitle = "The analysis of Walmart Women’s Shoes",
                theme = shinytheme("united")),
     tabsetPanel(type = "tabs",
-                tabPanel("Regression",
-                         helpText("This tab is suppose to campare the most 500 expensives women shoes's prices in 2015-2019"),
+                tabPanel("Statistical Models",
+                         helpText("This tab panel is suppose to campare the most 500 expensives women shoes's prices in 2015-2019"),
                          sidebarLayout(
                              sidebarPanel(
                                  varSelectInput("var2X", "X year prices",
@@ -143,7 +143,7 @@ ui <- fluidPage(
                                                 data = prices, selected = "discPrices19"),
                                  checkboxInput("log", "Log Transformation"),
                                  checkboxInput("t", "t-procedures"),
-                                 checkboxInput("slr", "Simple linear regression"),
+                                 checkboxInput("slr", "Simple Linear Regression"),
                                  tableOutput("eda"),
                                  width = 10
                              ),
@@ -217,17 +217,14 @@ server <- function(input, output) {
                     select("T-statistic" = statistic, "DF" = parameter,
                            "P-value" = p.value, "Estimate" = estimate,
                            "95 % Lower" = conf.low, "95 % Upper" = conf.high)
-                }else{
-                    print("Both variables should be transferred together")
                 }
        }
     })# renderTable 
     
     output$SLRplot <- renderPlot({
         stopifnot(is.numeric(prices[[input$var2X]]) & is.numeric(prices[[input$var2Y]]))
-        pl2 <- ggplot(prices, aes(x = !!input$var2X, y = !!input$var2Y))
             if(input$slr & input$log){
-                    pl2 <- pl2 + 
+                ggplot(prices, aes(x = !!input$var2X, y = !!input$var2Y)) +
                         geom_point() +
                         scale_x_log10() +
                         scale_y_log10() +
@@ -235,7 +232,7 @@ server <- function(input, output) {
                         labs(x = paste("Log(",input$var2X,")")) +
                         labs(y = paste("Log(",input$var2Y,")"))
                 }else if(input$slr){
-                    pl2 <- pl2 + 
+                ggplot(prices, aes(x = !!input$var2X, y = !!input$var2Y)) + 
                         geom_point() +
                         geom_smooth(method = lm, se = FALSE)
                 }

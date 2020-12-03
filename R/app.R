@@ -5,6 +5,7 @@ library(tidyverse)
 library(broom)
 library(lubridate)
 library(shinythemes)
+library(mosaic)
 
 # download data
 ws1 <- read_csv(file = "../data/Datafiniti_Womens_Shoes_Jun19.csv")
@@ -142,10 +143,15 @@ ui <- fluidPage(
                                  varSelectInput("var2Y", "Y year prices?",
                                                 data = prices, selected = 2),
                                  checkboxInput("log2Y", "Log_Transform?"),
-                                 checkboxInput("OLS", "Fit OLS?"),
-                                 tableOutput("table1")
+                                 actionButton("t", "t-procedures", icon = NULL),
+                                 actionButton("slr", "SLR model", icon = NULL),
+                                 tableOutput("eda"),
+                                 width = 10
                              ),
-                             mainPanel(plotOutput("plot2")
+                             mainPanel(
+                                 tableOutput("ttest"),
+                                 plotOutput("SLRplot"), 
+                                 width = 12
                              )#sidebarPanel
                          )#sidebarLayout
                 ), # tabPanel
@@ -173,40 +179,55 @@ ui <- fluidPage(
 # SERVER
 server <- function(input, output) {
     
-   # datasetInput <- reactive({
-        #temp <- data.frame(wsLists[[(input$dataset)]])
-   # }) 
-    output$table1 <- renderTable({
-        # specify_decimal <- function(x, k) trimws(format(round(x, k), nsmall = k))
+    output$eda <- renderTable({
+       stopifnot(is.numeric(prices[[input$var2X]]) & is.numeric(prices[[input$var2Y]]))
+        if(input$log2X & input$log2Y){
+            prices %>%
+                select(input$var2X, input$var2Y) %>% 
+                log() %>%
+                tidy(favstats())
+        }else if(!input$log2X & !input$log2Y){
+            prices %>%
+                select(input$var2X, input$var2Y) %>% 
+                tidy(favstats())
+
+        }else{
+            print("Both variables should be transferred together")
+        }
+    })# renderTable 
+    
+    output$ttest <- renderTable({
         stopifnot(is.numeric(prices[[input$var2X]]) & is.numeric(prices[[input$var2Y]]))
+       if(input$t){
             if(input$log2X & input$log2Y){
                 prices %>%
-                    select(input$var2X, input$var2Y) %>% 
+                   select(input$var2X, input$var2Y) %>% 
                     log() %>%
                     t.test(alternative = "two.sided", 
                            mu = 0 , conf.level = 0.95) %>% 
                     broom::tidy() %>%
-                    select("P-value" = p.value, "Estimate" = estimate,
+                    select("T-statistic" = statistic, "DF" = parameter,
+                           "P-value" = p.value, "Estimate" = estimate,
                            "95 % Lower" = conf.low, "95 % Upper" = conf.high)
             }else if(!input$log2X & !input$log2Y){
                 prices %>%
-                    select(input$var2X, input$var2Y) %>% 
-                    t.test(alternative = "two.sided", 
+                   select(input$var2X, input$var2Y) %>% 
+                   t.test(alternative = "two.sided", 
                            mu = 0 , conf.level = 0.95) %>% 
                     broom::tidy() %>%
-                    select("P-value" = p.value, "Estimate" = estimate,
+                    select("T-statistic" = statistic, "DF" = parameter,
+                           "P-value" = p.value, "Estimate" = estimate,
                            "95 % Lower" = conf.low, "95 % Upper" = conf.high)
                 }else{
                     print("Both variables should be transferred together")
-                    }
+                }
+       }
     })# renderTable 
     
-    output$plot2 <- renderPlot({
-       # mydata <- datasetInput()
+    output$SLRplot <- renderPlot({
+        stopifnot(is.numeric(prices[[input$var2X]]) & is.numeric(prices[[input$var2Y]]))
         pl2 <- ggplot(prices, aes(x = !!input$var2X, y = !!input$var2Y))
-        if(is.numeric(prices[[input$var2X]]) & is.numeric(prices[[input$var2Y]])){
-            if(input$OLS){
-                if(input$log2X & input$log2Y){
+            if(input$slr & input$log2X & input$log2Y){
                     pl2 <- pl2 + 
                         geom_point() +
                         scale_x_log10() +
@@ -214,149 +235,79 @@ server <- function(input, output) {
                         geom_smooth(method = lm, se = FALSE) +
                         labs(x = paste("Log(",input$var2X,")")) +
                         labs(y = paste("Log(",input$var2Y,")"))
-                }else if(input$log2X){
-                    pl2 <- pl2 + 
-                        geom_point() +
-                        scale_x_log10() +
-                        geom_smooth(method = lm, se = FALSE) +
-                        labs(x = paste("Log(",input$var2X,")")) 
-                }else if(input$log2Y){
-                    pl2 <- pl2 + 
-                        geom_point() +
-                        scale_y_log10() +
-                        geom_smooth(method = lm, se = FALSE) +
-                        labs(y = paste("Log(",input$var2Y,")"))
-                }else{
+                }else if(input$slr){
                     pl2 <- pl2 + 
                         geom_point() +
                         geom_smooth(method = lm, se = FALSE)
                 }
-            }else{
-                if(input$log2X & input$log2Y){
-                    pl2 <- pl2 + 
-                        geom_point() +
-                        scale_x_log10() +
-                        scale_y_log10() +
-                        labs(x = paste("Log(",input$var2X,")")) +
-                        labs(y = paste("Log(",input$var2Y,")"))
-                }else if(input$log2X){
-                    pl2 <- pl2 + 
-                        geom_point() +
-                        scale_x_log10() +
-                        labs(x = paste("Log(",input$var2X,")"))
-                }else if(input$log2Y){
-                    pl2 <- pl2 + 
-                        geom_point() +
-                        scale_y_log10() +
-                        labs(y = paste("Log(",input$var2Y,")"))
-                }else{
-                    pl2 <- pl2 + geom_point()
-                }
-            }# OLS
-        }else if(is.numeric(wsRegression[[input$var2X]]) & !is.numeric(wsRegression[[input$var2Y]])){
-            if(input$log2X & input$log2Y){
-                validate(
-                    need(is.double(wsRegression[[input$var2X]]) & is.double(wsRegression[[input$var2Y]]),
-                         "Hi User! The Y variable is not numeric.")
-                )
-            }else if(input$log2Y){
-                validate(
-                    need(is.double(wsRegression[[input$var2Y]]),
-                         "Hi User! The Y variable is not numeric.")
-                ) 
-            }else if(input$log2X){
-                pl2 <- pl2 + 
-                    geom_boxplot() +
-                    scale_x_log10() +
-                    labs(x = paste("Log(",input$var2X,")"))
-            }
-            else{
-                pl2 <- pl2 + 
-                    geom_boxplot()  
-            }
-            
-            
-        }else if(!is.numeric(wsRegression[[input$var2X]]) & is.numeric(wsRegression[[input$var2Y]])){
-            if(input$log2X & input$log2Y){
-                pl2 <- pl2 +
-                    validate(
-                        need(is.double(wsRegression[[input$var2X]]) & is.double(wsRegression[[input$var2Y]]),
-                             "Hi User! The X variable is not numeric.")
-                    ) 
-            }else if(input$log2X){
-                validate(
-                    need(is.double(wsRegression[[input$var2X]]),
-                         "Hi User! The X variable is not numeric.")
-                ) 
-            }else if(input$log2Y){
-                pl2 <- pl2 + 
-                    geom_boxplot() +
-                    scale_y_log10() +
-                    labs(y = paste("Log(",input$var2Y,")"))
-                
-            }
-            else{
-                pl2 <- pl2 + 
-                    geom_boxplot()
-            }
-            
-        }else{
-            if(input$log2X & input$log2Y){
-                validate(
-                    need(is.double(wsRegression[[input$var2X]]&wsRegression[[input$var2Y]]),
-                         "Hi User! The variable is not numeric.")
-                )  
-            }else if(input$log2X){
-                validate(
-                    need(is.double(wsRegression[[input$var2X]]),
-                         "Hi User! The variable is not numeric.")
-                )
-            }else if(input$log2Y){
-                validate(
-                    need(is.double(wsRegression[[input$var2Y]]),
-                         "Hi User! The variable is not numeric.")
-                )
-            }else{
-                pl2 <- pl2 + geom_jitter()
-            }
-        }
-        pl2
-    })# renderPlot (End of second table)
-    
+            })# renderPlot 
+      
     output$sheets <- renderDataTable({
         keep(ws, ~ typeof(.) == "double")
         
     })# renderDataTable
     
-    # extra credit - output
+# separate - output
     
     output$lm <- renderPrint({
         if(is.numeric(prices[[input$var2X]]) & 
            is.numeric(prices[[input$var2Y]]) &
-           input$OLS){
+           input$slr &
+           input$log2X &
+           input$log2Y){
             summary(lm(log(prices[[input$var2Y]]) ~ log(prices[[input$var2X]])))
+        }else if(is.numeric(prices[[input$var2X]]) & 
+                 is.numeric(prices[[input$var2Y]]) &
+           input$slr){
+            summary(lm(prices[[input$var2Y]] ~ prices[[input$var2X]]))
         }
     })#renderPrint
     
     output$residual <- renderPlot({
         if(is.numeric(prices[[prices$var2X]]) & 
            is.numeric(prices[[prices$var2Y]]) &
-           input$OLS){
+           input$slr &
+           input$log2X &
+           input$log2Y){
             model <- augment(lm(log(prices[[input$var2Y]]) ~ log(prices[[input$var2X]])))
             model %>%
-                ggplot(aes(x = .fitted, y = .resid)) + 
-                geom_point() +
+                ggplot() + 
+                geom_point(aes(x = !!.fitted, y = !!.resid)) +
                 labs(title = "Residuals vs Fitted",
-                     x = "x",
-                     y = "y")
+                     x = "fitted values",
+                     y = "residuals")
+            
+        }else if(is.numeric(prices[[input$var2X]]) & 
+                 is.numeric(prices[[input$var2Y]]) &
+                 input$slr &
+                 !input$log2X &
+                 !input$log2Y){
+            model <- augment(lm(prices[[input$var2Y]] ~ prices[[input$var2X]]))
+            model %>%
+                ggplot() + 
+                geom_point(aes(x = !!.fitted, y = !!.resid)) +
+                labs(title = "Residuals vs Fitted",
+                     x = "fitted values",
+                     y = "residuals")
         }
     })#renderPlot
     
     output$qq <- renderPlot({
         if(is.numeric(prices[[input$var2X]]) & 
            is.numeric(prices[[input$var2Y]]) &
-           input$OLS){
+           input$slr &
+           input$log2X &
+           input$log2Y){
             model <- augment(lm(log(prices[[input$var2Y]]) ~ log(prices[[input$var2X]])))
+            model %>%
+                ggplot() + 
+                ggtitle("Normal QQ Plot") +
+                geom_qq(aes(sample = .resid)) +
+                geom_qq_line(aes(sample = .resid))
+        }else if(is.numeric(prices[[input$var2X]]) & 
+                 is.numeric(prices[[input$var2Y]]) &
+                 input$slr){
+            model <- augment(lm(prices[[input$var2Y]] ~ prices[[input$var2X]]))
             model %>%
                 ggplot() + 
                 ggtitle("Normal QQ Plot") +

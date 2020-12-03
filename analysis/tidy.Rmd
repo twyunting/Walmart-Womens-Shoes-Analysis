@@ -140,10 +140,24 @@ ws2015 %>%
 
 
 ```
+
 ```{r}
 aa <- t.test(prices$discPrices15, prices$discPrices16)
 aa
   broom::tidy(aa) 
+  
+model <- augment(lm(log(prices$discPrices15) ~ log(prices$discPrices16)))
+            model %>%
+                ggplot() + 
+                geom_point(aes(x = .fitted, y = .resid)) +
+                labs(title = "Residuals vs Fitted",
+                     x = "fitted values",
+                     y = "residuals")
+```
+
+```{r}
+library(mosaic)
+tidy(favstats(prices$discPrices15, prices$discPrices16))
 ```
 
 ```{r}

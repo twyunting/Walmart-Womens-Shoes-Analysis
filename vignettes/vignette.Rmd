@@ -1,16 +1,25 @@
 ---
-title: " vignette"
+title: " Vignette"
+author: "Yunting Chiu"
+date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{my-vignette}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+urlcolor: "blue"
 ---
 
-```{r, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
-)
+```{r, echo=FALSE}
+library(rmarkdown)
 ```
+# Shiny App
+# The analysis of Walmart Women’s Shoes between March to May 2019
+
+## Authors
+- Jiarong Li
+- Shan Lin
+- Xubo Tang
+- [Yunting Chiu](http://linkedin.com/in/yuntingchiu)
+
 

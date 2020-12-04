@@ -1,5 +1,5 @@
 ---
-title: "Tiay year function"
+title: "Tidy year function"
 author: "Yunting Chiu"
 date: "12/3/2020"
 output: pdf_document

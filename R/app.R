@@ -128,8 +128,8 @@ ui <- fluidPage(
                theme = shinytheme("cerulean")),
     tabsetPanel(type = "tabs",
                 tabPanel("Statistical Models",
-                         helpText("This tab panel is showing up top the 500 women's shoes ranked by price descending order in 2015~2019."),
-                         helpText("origPricesXX is means original prices for women's shoes in this year; disPricesXX is means discounted prices for women's shoes in this year. e.g. discPrices16 is discoun ted prices in 2016"),
+                         helpText("1. This tab panel is showing up top the 500 women's shoes ranked by prices descending order in 2015~2019."),
+                         helpText("2. origPricesXX is means original prices for women's shoes in this year; disPricesXX is means discounted prices for women's shoes in this year. e.g. discPrices16 indicates discounted prices in 2016."),
                          sidebarLayout(
                              sidebarPanel(
                                  varSelectInput("var2X", "X - prices of this year",

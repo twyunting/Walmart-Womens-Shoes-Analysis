@@ -1,0 +1,183 @@
+---
+title: "Tiay year function"
+author: "Yunting Chiu"
+date: "12/3/2020"
+output: pdf_document
+---
+
+```{r}
+library(tidyverse)
+library(lubridate)
+
+# download data
+ws1 <- read_csv(file = "../data/Datafiniti_Womens_Shoes_Jun19.csv")
+ws2 <- read_csv(file = "../data/Datafiniti_Womens_Shoes.csv")
+ws3 <- read_csv(file = "../data/7003_1.csv")  
+
+# clean and tidy
+ws1 %>%
+  select(dateAdded, brand, categories, colors, manufacturer,
+         prices.amountMax, prices.color, 
+         prices.offer, prices.size, sizes,
+         ) -> ws1
+
+ws2 %>%
+  select(dateAdded, brand, categories, colors, manufacturer,
+         prices.amountMax, prices.color, 
+         prices.offer, prices.size, sizes,
+         ) -> ws2
+  
+ws3 %>%
+  select(dateAdded, brand, categories, colors, manufacturer,
+         prices.amountMax,  prices.color, 
+         prices.offer, prices.size, sizes,
+         )  %>%
+  mutate(prices.amountMax = as.numeric(prices.amountMax)
+         ) -> ws3
+
+# combined all data
+ws1 %>%
+bind_rows(ws2) %>%
+bind_rows(ws3) -> ws
+
+ws %>%
+# convert Europe sizes to the US sizes
+  mutate(sizesUS = str_extract(prices.size, "\\d{1,}"),
+         sizesUS = recode(sizesUS, "44" = "12",
+                                   "43" = "11",
+                                   "42" = "11",
+                                   "41" = "10", 
+                                   "40" = "9",
+                                   "39" = "8",
+                                   "38" = "7.5",
+                                   "37" = "6.5",
+                                   "36" = "6",
+                                   "35" = "5"),
+         sizesUS = as.numeric(sizesUS)) %>%
+# time 
+  separate(dateAdded, into = c("date", "time"), sep = " ") %>%
+  mutate(date = ymd(date),
+         time = hms(time),
+# add discount price (% off) and calculate after discounted prices
+         discount = (str_extract(prices.offer, "\\d{1,}")),
+         discount = case_when(is.na(discount) ~ 100,
+                                      TRUE ~ as.numeric(discount)),
+         prices.discounted =  prices.amountMax*(discount/100)
+         ) %>%
+  select(-sizes, -prices.size) -> ws
+
+```
+
+- normal tidy function
+```{r}
+#filter out the year
+# 2014
+ws %>%
+  filter(date < parse_date("2015", format = "%Y")) %>%
+  select(prices.amountMax, prices.discounted) %>%
+  rename("14origPrices" = "prices.amountMax",
+         "14discPrices" = "prices.discounted") -> ws2014
+
+# 2015
+ws %>%
+  filter(date >= parse_date("2015", format = "%Y") & date < parse_date("2016", format = "%Y")) %>%
+  select(prices.amountMax, prices.discounted) %>%
+  rename("origPrices15" = "prices.amountMax",
+         "discPrices15" = "prices.discounted") %>%
+  arrange(desc(origPrices15)) %>%
+  head(500) -> ws2015
+
+# 2016
+ws %>%
+  filter(date >= parse_date("2016", format = "%Y") & date < parse_date("2017", format = "%Y")) %>%
+  select(prices.amountMax, prices.discounted) %>%
+  rename("origPrices16" = "prices.amountMax",
+         "discPrices16" = "prices.discounted") %>%
+  arrange(desc(origPrices16)) %>%
+  head(500) -> ws2016
+
+# 2017
+ws %>%
+  filter(date >= parse_date("2017", format = "%Y") & date < parse_date("2018", format = "%Y")) %>%
+  select(prices.amountMax, prices.discounted) %>%
+  rename("origPrices17" = "prices.amountMax",
+         "discPrices17" = "prices.discounted") %>%
+  arrange(desc(origPrices17)) %>%
+  head(500) -> ws2017
+
+# 2018
+ws %>%
+  filter(date >= parse_date("2018", format = "%Y") & date < parse_date("2019", format = "%Y")) %>%
+  select(prices.amountMax, prices.discounted) %>%
+  rename("origPrices18" = "prices.amountMax",
+         "discPrices18" = "prices.discounted") %>%
+  arrange(desc(origPrices18)) %>%
+  head(500) -> ws2018
+
+# 2019
+ws %>%
+  filter(date >= parse_date("2019", format = "%Y")) %>%
+  select(prices.amountMax, prices.discounted) %>%
+  rename("origPrices19" = "prices.amountMax",
+         "discPrices19" = "prices.discounted") %>%
+  arrange(desc(origPrices19)) %>%
+  head(500) -> ws2019
+
+ws2015 %>%
+  bind_cols(ws2016, ws2017, ws2018, ws2019) -> prices
+
+
+```
+
+```{r}
+tidyWalmartYears <- function(x){
+  stopifnot(is.data.frame(x))
+  ws %>%
+  select(date, prices.amountMax, prices.discounted) %>%
+  mutate(Year = str_extract(date, "\\d\\d\\d\\d"),
+         Year = as.numeric(Year)) %>%
+  filter(!is.na(prices.amountMax) & !is.na(Year)) -> wsYear
+  if(wsYear$Year == 2015){
+    wsYear %>%
+       filter(Year == 2015) %>%
+       rename("originalPrices_2015" = "prices.amountMax",
+              "discountPrices_2015" = "prices.discounted") %>%
+       arrange(desc(originalPrices_2015)) %>%
+       head(500) -> ws2015
+  }else if(wsYear$Year == 2016){
+    wsYear %>%
+       filter(Year == 2016) %>%
+       rename("originalPrices_2016" = "prices.amountMax",
+              "discountPrices_2016" = "prices.discounted") %>%
+      arrange(desc(originalPrices_2016)) %>%
+       head(500) -> ws2016
+  }else if(wsYear$Year == 2017){
+    wsYear %>%
+       filter(Year == 2017) %>%
+       rename("originalPrices_2017" = "prices.amountMax",
+              "discountPrices_2017" = "prices.discounted") %>%
+      arrange(desc(originalPrices_2017)) %>%
+       head(500) -> ws2017
+  }else if(wsYear$Year == 2018){
+     wsYear %>%
+       filter(Year == 2018) %>%
+       rename("originalPrices_2018" = "prices.amountMax",
+              "discountPrices_2018" = "prices.discounted") %>%
+      arrange(desc(originalPrices_2018)) %>%
+       head(500) -> ws2018
+  }else if(wsYear$Year == 2019){
+     wsYear %>%
+       filter(Year == 2019) %>%
+       rename("originalPrices_2019" = "prices.amountMax",
+              "discountPrices_2019" = "prices.discounted") %>%
+      arrange(desc(originalPrices_2019)) %>%
+       head(500) -> ws2019
+  }
+ ws2015 %>%
+ bind_cols(ws2016, ws2017, ws2018, ws2019) -> prices
+}
+```
+
+```{r}
+tidyWalmartYears(ws)
+```

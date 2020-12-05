@@ -1,18 +1,23 @@
+# Shiny App for STAT-613 final project at American University
+# Date: Dec 05, 2020
 # The analysis of Walmart Women’s Shoes 
-# installing libraries
+
+# Installing libraries
 library(shiny)
 library(tidyverse)
 library(broom)
 library(lubridate)
 library(shinythemes)
 library(mosaic)
+library(wordcloud2)
+library(tidytext)
 
-# download data
+# Download data
 ws1 <- read_csv(file = "../data/Datafiniti_Womens_Shoes_Jun19.csv")
 ws2 <- read_csv(file = "../data/Datafiniti_Womens_Shoes.csv")
 ws3 <- read_csv(file = "../data/7003_1.csv")  
 
-# clean and tidy
+# Clean and tidy dataset
 ws1 %>%
     select(dateAdded, brand, categories, colors, manufacturer,
            prices.amountMax, prices.color, 
@@ -33,7 +38,7 @@ ws3 %>%
     mutate(prices.amountMax = as.numeric(prices.amountMax)
     ) -> ws3
 
-# combined all data
+# Combined all data
 ws1 %>%
     bind_rows(ws2) %>%
     bind_rows(ws3) -> ws
@@ -63,11 +68,12 @@ ws %>%
            prices.discounted =  prices.amountMax*(discount/100)
     ) %>%
     select(-sizes, -prices.size) -> ws
+
 ################################## end clean and tidy dataframe ###################################
 ws$colors <- as.character(ws$colors) 
-################################## end tidy Xubo ########################################
+################################## end tidy Xubo and Jiarong ########################################
 
-#filter out the year
+# Filter out the year
 # 2014
 ws %>%
     filter(date < parse_date("2015", format = "%Y")) %>%
@@ -131,9 +137,15 @@ ui <- fluidPage(
                windowTitle = "The analysis of Walmart Women’s Shoes",
                theme = shinytheme("cerulean")),
     tabsetPanel(type = "tabs",
+                
+                # ----------------------------------
+                # tab panel 1 - Vignette
                 tabPanel("Vignette",
                          includeMarkdown("../vignettes/vignette.rmd")
                          ),
+                
+                # ----------------------------------
+                # tab panel 2 - Descriptive Analysis by Date (Xubo and Jiarong)
                 tabPanel("Descriptive Analysis by Date",
                          sidebarLayout(
                            sidebarPanel(
@@ -154,6 +166,9 @@ ui <- fluidPage(
                            )#mainPanel
                          )#sidebarLayout
                 ),#tabPanel
+                
+                # ----------------------------------
+                # tab panel 3 - Statistical Models (Yunting Chiu)
                 tabPanel("Statistical Models",
                          helpText("1. This tab panel is showing up top the 500 women's shoes ranked by prices descending order in 2015~2019."),
                          helpText("2. origPricesXX is means original prices for women's shoes in this year; disPricesXX is means discounted prices for women's shoes in this year. e.g. discPrices16 indicates discounted prices in 2016."),
@@ -211,6 +226,7 @@ ui <- fluidPage(
 )#fluidPage
 
 ################################## end INPUT ########################################
+
 # SERVER
 server <- function(input, output) {
     
@@ -237,7 +253,7 @@ server <- function(input, output) {
     wordcloud2(wscloud)
   })  
 
-################################## end output Xubo ########################################
+################################## end output Xubo and Jiarong ########################################
     
     output$eda <- renderTable({
        stopifnot(is.numeric(prices[[input$var2X]]) & is.numeric(prices[[input$var2Y]]))
@@ -256,6 +272,7 @@ server <- function(input, output) {
         }
     })# renderTable 
     
+# t.test   
     output$ttest <- renderTable({
         stopifnot(is.numeric(prices[[input$var2X]]) & is.numeric(prices[[input$var2Y]]))
        # specify_decimal <- function(x, k) trimws(format(round(x, k), nsmall=k))
@@ -363,7 +380,7 @@ server <- function(input, output) {
       }
     })# renderTable 
 
-########################### simple Linear regression ################################################  
+# Simple linear regression 
     
     output$SLRplot <- renderPlot({
         stopifnot(is.numeric(prices[[input$var2X]]) & is.numeric(prices[[input$var2Y]]))
@@ -456,6 +473,7 @@ server <- function(input, output) {
     })# renderPlot
     
 }# server 
+
 ################################## end output Yunting ########################################
 
 # Run the application 

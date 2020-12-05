@@ -63,9 +63,10 @@ ws %>%
            prices.discounted =  prices.amountMax*(discount/100)
     ) %>%
     select(-sizes, -prices.size) -> ws
-################################## end tidy dataframe ###################################
+################################## end clean and tidy dataframe ###################################
 ws$colors <- as.character(ws$colors) 
 ################################## end tidy Xubo ########################################
+
 #filter out the year
 # 2014
 ws %>%
@@ -130,8 +131,10 @@ ui <- fluidPage(
                windowTitle = "The analysis of Walmart Women’s Shoes",
                theme = shinytheme("cerulean")),
     tabsetPanel(type = "tabs",
-                # The first panel
-                tabPanel("Descriptive analysis by date",
+                tabPanel("Vignette",
+                         includeMarkdown("../vignettes/vignette.rmd")
+                         ),
+                tabPanel("Descriptive Analysis by Date",
                          sidebarLayout(
                            sidebarPanel(
                              dateRangeInput(inputId = "daterange",
@@ -170,7 +173,34 @@ ui <- fluidPage(
                              ),
                              mainPanel(
                                  tableOutput("ttest"),
-                                 width = 12
+                                 width = 12,
+                                 fluidRow(title = "Outputs",
+                                          column(3,
+                                                 plotOutput("hisX")
+                                          ),
+                                          column(3,
+                                                 plotOutput("hisY")
+                                          ),
+                                          column(3,
+                                                 plotOutput("qqX")
+                                          ),
+                                          column(3,
+                                                 plotOutput("qqY")
+                                          ),
+                                          column(12,
+                                                 plotOutput("SLRplot")
+                                          ),
+                                          column(4,
+                                                 verbatimTextOutput("lm")
+                                          ),
+                                          column(4,
+                                                 plotOutput("residual")
+                                          ),
+                                          column(4,
+                                                 plotOutput("qq")
+                                          )
+                                          
+                                 ) #fluidRow
                              )#sidebarPanel
                          )#sidebarLayout
                 ), # tabPanel
@@ -179,33 +209,7 @@ ui <- fluidPage(
                 )# tabPanel
     ),# tabsetPanel
     
-    fluidRow(title = "Outputs",
-             column(3,
-                    plotOutput("hisX")
-             ),
-             column(3,
-                    plotOutput("hisY")
-             ),
-             column(3,
-                    plotOutput("qqX")
-             ),
-             column(3,
-                    plotOutput("qqY")
-             ),
-             column(12,
-                    plotOutput("SLRplot")
-             ),
-             column(4,
-                    verbatimTextOutput("lm")
-             ),
-             column(4,
-                    plotOutput("residual")
-             ),
-             column(4,
-                    plotOutput("qq")
-             )
-             
-    ) #fluidRow
+  
     
 )#fluidPage
 

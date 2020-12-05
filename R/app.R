@@ -63,8 +63,9 @@ ws %>%
            prices.discounted =  prices.amountMax*(discount/100)
     ) %>%
     select(-sizes, -prices.size) -> ws
-
-
+################################## end tidy dataframe ###################################
+ws$colors <- as.character(ws$colors) 
+################################## end tidy Xubo ########################################
 #filter out the year
 # 2014
 ws %>%
@@ -121,12 +122,35 @@ ws %>%
 ws2015 %>%
     bind_cols(ws2016, ws2017, ws2018, ws2019) -> prices
 
+################################## end tidy Yunting ########################################
+
 # input 
 ui <- fluidPage(
     navbarPage("The analysis of Walmart Women’s Shoes",
                windowTitle = "The analysis of Walmart Women’s Shoes",
                theme = shinytheme("cerulean")),
     tabsetPanel(type = "tabs",
+                # The first panel
+                tabPanel("Descriptive analysis by date",
+                         sidebarLayout(
+                           sidebarPanel(
+                             dateRangeInput(inputId = "daterange",
+                                            label = "Select the date range",
+                                            start = min(ws$date),
+                                            end = max(ws$date),
+                                            min = min(ws$date),
+                                            max = max(ws$date),
+                                            format = "yyyy/mm/dd",
+                                            separator = "-"
+                             )#dateRangeInput
+                           ),#sidebarPanel
+                           mainPanel(
+                             plotOutput("dist"),
+                             plotOutput("rank"),
+                             wordcloud2Output("wordcloud")
+                           )#mainPanel
+                         )#sidebarLayout
+                ),#tabPanel
                 tabPanel("Statistical Models",
                          helpText("1. This tab panel is showing up top the 500 women's shoes ranked by prices descending order in 2015~2019."),
                          helpText("2. origPricesXX is means original prices for women's shoes in this year; disPricesXX is means discounted prices for women's shoes in this year. e.g. discPrices16 indicates discounted prices in 2016."),
@@ -185,9 +209,34 @@ ui <- fluidPage(
     
 )#fluidPage
 
-
+################################## end INPUT ########################################
 # SERVER
 server <- function(input, output) {
+    
+    output$dist <- renderPlot({
+    s = subset(ws, ws$date >= input$daterange[1] & ws$date <= input$daterange[2])
+    ggplot(data = s, aes(x = s$prices.amountMax)) + geom_histogram()
+   })
+  
+    output$rank <- renderPlot({
+    s2 = subset(ws, ws$date >= input$daterange[1] & ws$date <= input$daterange[2])
+    as.data.frame(table(s2$brand)) %>%
+      arrange(-Freq) %>%
+      head(10) -> brd
+    ggplot(data = brd) +
+      geom_point(mapping = aes(x = fct_reorder(Var1, Freq), y = Freq))+
+      coord_flip()
+  })
+  
+    output$wordcloud <- renderWordcloud2({
+    s1 = subset(ws, ws$date >= input$daterange[1] & ws$date <= input$daterange[2])
+    s1 %>%
+      unnest_tokens(word, colors) %>%
+      count(word, sort = T) -> wscloud
+    wordcloud2(wscloud)
+  })  
+
+################################## end output Xubo ########################################
     
     output$eda <- renderTable({
        stopifnot(is.numeric(prices[[input$var2X]]) & is.numeric(prices[[input$var2Y]]))
@@ -313,7 +362,8 @@ server <- function(input, output) {
       }
     })# renderTable 
 
-########################### simple Linear regression ################################################    
+########################### simple Linear regression ################################################  
+    
     output$SLRplot <- renderPlot({
         stopifnot(is.numeric(prices[[input$var2X]]) & is.numeric(prices[[input$var2Y]]))
             if(input$slr & input$log){
@@ -405,6 +455,7 @@ server <- function(input, output) {
     })# renderPlot
     
 }# server 
+################################## end output Yunting ########################################
 
 # Run the application 
 shinyApp(ui = ui, server = server)

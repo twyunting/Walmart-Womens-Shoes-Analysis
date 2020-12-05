@@ -187,19 +187,18 @@ ui <- fluidPage(
                                           column(3,
                                                  plotOutput("qqY")
                                           ),
-                                          column(12,
+                                          column(6,
                                                  plotOutput("SLRplot")
                                           ),
-                                          column(4,
+                                          column(6,
                                                  verbatimTextOutput("lm")
                                           ),
-                                          column(4,
+                                          column(6,
                                                  plotOutput("residual")
                                           ),
-                                          column(4,
+                                          column(6,
                                                  plotOutput("qq")
                                           )
-                                          
                                  ) #fluidRow
                              )#sidebarPanel
                          )#sidebarLayout
@@ -208,8 +207,6 @@ ui <- fluidPage(
                          dataTableOutput("sheets")
                 )# tabPanel
     ),# tabsetPanel
-    
-  
     
 )#fluidPage
 

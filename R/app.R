@@ -133,7 +133,7 @@ ws2015 %>%
 
 # input 
 ui <- fluidPage(
-    navbarPage("The analysis of Walmart Women’s Shoes",
+    navbarPage("Analysis of Walmart Women’s Shoes",
                windowTitle = "The analysis of Walmart Women’s Shoes",
                theme = shinytheme("cerulean")),
     tabsetPanel(type = "tabs",

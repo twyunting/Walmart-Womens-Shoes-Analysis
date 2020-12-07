@@ -1,5 +1,7 @@
 # Walmart Women's Shoes Analysis from 2014 to 2019
-![](../pics/walmart.jpg)
+
+![](pics/walmart.jpg)
+
 ## Programming Language
 * R Shiny App
 

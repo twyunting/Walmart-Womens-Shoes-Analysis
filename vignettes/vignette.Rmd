@@ -1,5 +1,5 @@
 ---
-title: " Vignette of Shiny App"
+title: " Vignette"
 subtitle: "Walmart Women's Shoes Analysis from 2014 to 2019"
 author: "Jiarong Li, Shan Lin, Xubo Tang, Yunting Chiu"
 date: "`r Sys.Date()`"

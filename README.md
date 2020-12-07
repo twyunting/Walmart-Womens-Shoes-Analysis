@@ -1,5 +1,5 @@
 # Walmart Women's Shoes Analysis from 2014 to 2019
-###### In Shiny App
+###### In R Shiny App
 
 ![](pics/walmart.jpg)
 

@@ -1,16 +1,31 @@
 ---
-title: " vignette"
+title: " Vignette of Shiny App"
+author: "Yunting Chiu"
+date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{my-vignette}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+urlcolor: "blue"
 ---
+## The analysis of Walmart Women’s Shoes between 2014 to 2019
 
-```{r, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
-)
-```
+## Authors
+- Jiarong Li
+- Shan Lin
+- Xubo Tang
+- [Yunting Chiu](http://linkedin.com/in/yuntingchiu)
 
+## Motivation
+With the improvement of women’s economic ability and the variability of fashion demands, women’ shoes have become an important part of the footwear market as their demands for shoes increased. Some problems with meaningful business insights are brought to the attention of related parties, such as analysts, vendors and their customers: What is the average price of each distinct brand? Which brands have the highest prices? Which one has the widest distribution of prices? Is there a typical price distribution (e.g., normal) across brands or within specific brands? Is there an obvious difference in price between online and in store? The Shiny App of this project aimed to answer these questions and is used to determine brand markups, pricing strategies, and trends for luxury shoes.
+
+## Data sources
+The [dataset](https://data.world/datafiniti/womens-shoe-prices/workspace/file?filename=Datafiniti_Womens_Shoes_Jun19.csv) is from the [Data.World](https://data.world/) and created by Datafiniti. Datasets were updated in 2019, which is a list of more than 35.000 women's shoes in Walmart stores. There are 29 variables which contain price, brand, manufacture, ID, price discount, price size, shoes size, date created, image URL and so on. After going through the datasets, there are some variables that can be analyzed: price, brand, manufacture and price offer. We join three 
+separate datasets in one, and rearrange the date in chronological order, extract the prices of the shoes, and measure the price of the shoes after discount.
+
+## References 
+- EU to US shoe size: Conversion charts for women, men &amp; kids. (n.d.). Retrieved November 01, 2020, from https://www.blitzresults.com/en/shoe-size-euro/
+- Wasserstein, R., & Lazar, N. (2016). The ASA statement on p -Values: Context, Process, and Purpose. *The American Statistician, 70*(2), 129–133. https://doi.org/10.1080/00031305.2016.1154108
+- Parametric statistics. (2020, October 19). Retrieved December 03, 2020, from https://en.wikipedia.org/wiki/Parametric_statistics
+- Women's Shoe Prices - dataset by Datafiniti. (2019, June 25). Retrieved October 26, 2020, from https://data.world/datafiniti/womens-shoe-prices/workspace/file?filename=Datafiniti_Womens_Shoes_Jun19.csv

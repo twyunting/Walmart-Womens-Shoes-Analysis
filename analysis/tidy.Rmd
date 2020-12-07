@@ -10,27 +10,45 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r}
+# installing libraries
 library(tidyverse)
-ws <- read.csv(file = "../data/Datafiniti_Womens_Shoes_Jun19.csv")
+library(lubridate)
 
-```
+# download data
+ws1 <- read_csv(file = "../data/Datafiniti_Womens_Shoes_Jun19.csv")
+ws2 <- read_csv(file = "../data/Datafiniti_Womens_Shoes.csv")
+ws3 <- read_csv(file = "../data/7003_1.csv")  
 
-```{r}
-ws %>%
-  select(prices.size) %>%
-  distinct()
-```
+# clean and tidy
+ws1 %>%
+  select(dateAdded, brand, categories, colors, manufacturer,
+         prices.amountMax, prices.color, 
+         prices.offer, prices.size, sizes,
+         ) -> ws1
 
-```{r}
+ws2 %>%
+  select(dateAdded, brand, categories, colors, manufacturer,
+         prices.amountMax, prices.color, 
+         prices.offer, prices.size, sizes,
+         ) -> ws2
+  
+ws3 %>%
+  select(dateAdded, brand, categories, colors, manufacturer,
+         prices.amountMax,  prices.color, 
+         prices.offer, prices.size, sizes,
+         )  %>%
+  mutate(prices.amountMax = as.numeric(prices.amountMax)
+         ) -> ws3
+
+# combined all data
+ws1 %>%
+bind_rows(ws2) %>%
+bind_rows(ws3) -> ws
+
 ws %>%
-  # select(prices.size) %>%
-  mutate(sizesUS = str_extract(prices.size, "\\d{1,}")) %>%
-  filter(!is.na(sizesUS)) -> ws
-ws %>%
-  distinct(sizesUS) 
 # convert Europe sizes to the US sizes
-ws %>%
-  mutate(sizesUS = recode(sizesUS, "44" = "12",
+  mutate(sizesUS = str_extract(prices.size, "\\d{1,}"),
+         sizesUS = recode(sizesUS, "44" = "12",
                                    "43" = "11",
                                    "42" = "11",
                                    "41" = "10", 
@@ -39,28 +57,145 @@ ws %>%
                                    "38" = "7.5",
                                    "37" = "6.5",
                                    "36" = "6",
-                                   "35" = "5"
-                                   ),
-         sizesUS = as.numeric(sizesUS)) -> ws
+                                   "35" = "5"),
+         sizesUS = as.numeric(sizesUS)) %>%
+# time 
+  separate(dateAdded, into = c("date", "time"), sep = " ") %>%
+  mutate(date = ymd(date),
+         time = hms(time),
+# add discount price (% off) and calculate after discounted prices
+         discount = (str_extract(prices.offer, "\\d{1,}")),
+         discount = case_when(is.na(discount) ~ 100,
+                                      TRUE ~ as.numeric(discount)),
+         prices.discounted =  prices.amountMax*(discount/100)
+         ) %>%
+  select(-sizes, -prices.size) %>%
+  rename("prices" = "prices.amountMax") -> ws
+
+ws %>%
+  select(date, prices.amountMax, prices.discounted) %>%
+  rename("origPrices" = "prices.amountMax",
+         "discPrices" = "prices.discounted") %>%
+  mutate(Year = str_extract(date, "\\d\\d\\d\\d")) %>%
+  filter(!is.na(origPrices)) -> wsRegression
+
+wsRegression 
+```
+- guiding how to filter out the year
+```{r}
+#filter out the year
+# 2014
+ws %>%
+  filter(date < parse_date("2015", format = "%Y")) %>%
+  select(prices.amountMax, prices.discounted) %>%
+  rename("14origPrices" = "prices.amountMax",
+         "14discPrices" = "prices.discounted") -> ws2014
+
+# 2015
+ws %>%
+  filter(date >= parse_date("2015", format = "%Y") & date < parse_date("2016", format = "%Y")) %>%
+  select(prices.amountMax, prices.discounted) %>%
+  rename("origPrices15" = "prices.amountMax",
+         "discPrices15" = "prices.discounted") %>%
+  arrange(desc(origPrices15)) %>%
+  head(500) -> ws2015
+
+# 2016
+ws %>%
+  filter(date >= parse_date("2016", format = "%Y") & date < parse_date("2017", format = "%Y")) %>%
+  select(prices.amountMax, prices.discounted) %>%
+  rename("origPrices16" = "prices.amountMax",
+         "discPrices16" = "prices.discounted") %>%
+  arrange(desc(origPrices16)) %>%
+  head(500) -> ws2016
+
+# 2017
+ws %>%
+  filter(date >= parse_date("2017", format = "%Y") & date < parse_date("2018", format = "%Y")) %>%
+  select(prices.amountMax, prices.discounted) %>%
+  rename("origPrices17" = "prices.amountMax",
+         "discPrices17" = "prices.discounted") %>%
+  arrange(desc(origPrices17)) %>%
+  head(500) -> ws2017
+
+# 2018
+ws %>%
+  filter(date >= parse_date("2018", format = "%Y") & date < parse_date("2019", format = "%Y")) %>%
+  select(prices.amountMax, prices.discounted) %>%
+  rename("origPrices18" = "prices.amountMax",
+         "discPrices18" = "prices.discounted") %>%
+  arrange(desc(origPrices18)) %>%
+  head(500) -> ws2018
+
+# 2019
+ws %>%
+  filter(date >= parse_date("2019", format = "%Y")) %>%
+  select(prices.amountMax, prices.discounted) %>%
+  rename("origPrices19" = "prices.amountMax",
+         "discPrices19" = "prices.discounted") %>%
+  arrange(desc(origPrices19)) %>%
+  head(500) -> ws2019
+
+ws2015 %>%
+  bind_cols(ws2016, ws2017, ws2018, ws2019) -> prices
+
+
 ```
 
 ```{r}
-# testing
-ws %>%
-  arrange(desc(sizesUS)) %>%
-  distinct(sizesUS)
+aa <- t.test(prices$discPrices15, prices$discPrices16)
+aa
+  broom::tidy(aa) 
+  
+model <- augment(lm(log(prices$discPrices15) ~ log(prices$discPrices16)))
+            model %>%
+                ggplot() + 
+                geom_point(aes(x = .fitted, y = .resid)) +
+                labs(title = "Residuals vs Fitted",
+                     x = "fitted values",
+                     y = "residuals")
 ```
 
 ```{r}
-ws %>%
-  mutate(free.shipping = ifelse(str_length(prices.shipping) > 0, "NotFree", "Free"))%>%
-  separate(col = prices.offer, into = c("channel", "discount"), sep = ":")%>%
-  mutate(discount = ifelse(is.na(discount), 0, as.numeric(substr(discount, 1, str_length(discount)-5))/100)) %>%
-  mutate(channel = ifelse(substr(channel, 1, 3) == "Was", "In store only", channel)) -> ws
+library(mosaic)
+tidy(favstats(prices$discPrices15, prices$discPrices16))
+```
 
-ws %>%
-  count(colors) %>%
-  arrange(desc(n))
+```{r}
+prices %>%
+    ggplot() +
+    geom_histogram(aes(discPrices15)) +
+    geom_histogram(aes(origPrices16)) 
+prices %>%
+  gather(key = discPrices15, value = origPrices16) %>% 
+  ggplot(aes(x = origPrices16,fill= discPrices15)) + 
+  geom_histogram(position="dodge")
+
+par(mfrow=c(2,1)) # allows us to put two plots together stacked 
+# the (2,1) means 2 rows and 1 column of plots
+hist(prices$discPrices15,col="dark orange",main="brain volume unaffected",xlab='brain volume')
+hist(prices$discPrices15,col="tomato",main="brain volume affected",xlab='brain volume')
+
+```
+
+```{r}
+tidyShoes <- function(x){
+  
+  
+}
+```
+
+```{r}
+#ws %>%
+  #mutate(free.shipping = ifelse(str_length(prices.shipping) > 0, "NotFree", "Free"))%>%
+  #separate(col = prices.offer, into = c("channel", "discount"), sep = ":")%>%
+  #mutate(discount = ifelse(is.na(discount), 0, as.numeric(substr(discount, 1, #str_length(discount)-5))/100)) %>%
+ # mutate(channel = ifelse(substr(channel, 1, 3) == "Was", "In store only", channel)) -> ws
+
+# %>%
+  #count(colors) %>%
+  #arrange(desc(n))
 #color 
+#fct_lump()
 ```
 

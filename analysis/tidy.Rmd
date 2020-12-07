@@ -69,7 +69,8 @@ ws %>%
                                       TRUE ~ as.numeric(discount)),
          prices.discounted =  prices.amountMax*(discount/100)
          ) %>%
-  select(-sizes, -prices.size) -> ws
+  select(-sizes, -prices.size) %>%
+  rename("prices" = "prices.amountMax") -> ws
 
 ws %>%
   select(date, prices.amountMax, prices.discounted) %>%

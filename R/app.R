@@ -65,65 +65,61 @@ ws %>%
            discount = (str_extract(prices.offer, "\\d{1,}")),
            discount = case_when(is.na(discount) ~ 100,
                                 TRUE ~ as.numeric(discount)),
-           prices.discounted =  prices.amountMax*(discount/100)
-    ) %>%
-    select(-sizes, -prices.size) -> ws
+           prices.discounted =  prices.amountMax*(discount/100)) %>%
+    select(-sizes, -prices.size) %>%
+    rename("prices" = "prices.amountMax") -> ws
 
 ################################## end clean and tidy dataframe ###################################
 ws$colors <- as.character(ws$colors) 
 ################################## end tidy Xubo and Jiarong ########################################
-
-# Filter out the year
-# 2014
 ws %>%
-    filter(date < parse_date("2015", format = "%Y")) %>%
-    select(prices.amountMax, prices.discounted) %>%
-    rename("14origPrices" = "prices.amountMax",
-           "14discPrices" = "prices.discounted") -> ws2014
-
+  mutate(month = month(date)) %>%
+  select(c(month,sizesUS,discount)) -> month
+################################## end tidy Shan ########################################
+# Filter out the year
 # 2015
 ws %>%
     filter(date >= parse_date("2015", format = "%Y") & date < parse_date("2016", format = "%Y")) %>%
-    select(prices.amountMax, prices.discounted) %>%
-    rename("origPrices15" = "prices.amountMax",
-           "discPrices15" = "prices.discounted") %>%
-    arrange(desc(origPrices15)) %>%
+    select(prices, prices.discounted) %>%
+    rename("Original_Prices_2015" = "prices",
+           "Discounted_Prices_2015" = "prices.discounted") %>%
+    arrange(desc(Original_Prices_2015)) %>%
     head(500) -> ws2015
 
 # 2016
 ws %>%
     filter(date >= parse_date("2016", format = "%Y") & date < parse_date("2017", format = "%Y")) %>%
-    select(prices.amountMax, prices.discounted) %>%
-    rename("origPrices16" = "prices.amountMax",
-           "discPrices16" = "prices.discounted") %>%
-    arrange(desc(origPrices16)) %>%
+    select(prices, prices.discounted) %>%
+    rename("Original_Prices_2016" = "prices",
+           "Discounted_Prices_2016" = "prices.discounted") %>%
+    arrange(desc(Original_Prices_2016)) %>%
     head(500) -> ws2016
 
 # 2017
 ws %>%
     filter(date >= parse_date("2017", format = "%Y") & date < parse_date("2018", format = "%Y")) %>%
-    select(prices.amountMax, prices.discounted) %>%
-    rename("origPrices17" = "prices.amountMax",
-           "discPrices17" = "prices.discounted") %>%
-    arrange(desc(origPrices17)) %>%
+    select(prices, prices.discounted) %>%
+    rename("Original_Prices_2017" = "prices",
+           "Discounted_Prices_2017" = "prices.discounted") %>%
+    arrange(desc(Original_Prices_2017)) %>%
     head(500) -> ws2017
 
 # 2018
 ws %>%
     filter(date >= parse_date("2018", format = "%Y") & date < parse_date("2019", format = "%Y")) %>%
-    select(prices.amountMax, prices.discounted) %>%
-    rename("origPrices18" = "prices.amountMax",
-           "discPrices18" = "prices.discounted") %>%
-    arrange(desc(origPrices18)) %>%
+    select(prices, prices.discounted) %>%
+    rename("Original_Prices_2018" = "prices",
+           "Discounted_Prices_2018" = "prices.discounted") %>%
+    arrange(desc(Original_Prices_2018)) %>%
     head(500) -> ws2018
 
 # 2019
 ws %>%
     filter(date >= parse_date("2019", format = "%Y")) %>%
-    select(prices.amountMax, prices.discounted) %>%
-    rename("origPrices19" = "prices.amountMax",
-           "discPrices19" = "prices.discounted") %>%
-    arrange(desc(origPrices19)) %>%
+    select(prices, prices.discounted) %>%
+    rename("Original_Prices_2019" = "prices",
+           "Discounted_Prices_2019" = "prices.discounted") %>%
+    arrange(desc(Original_Prices_2019)) %>%
     head(500) -> ws2019
 
 ws2015 %>%
@@ -137,13 +133,11 @@ ui <- fluidPage(
                windowTitle = "The analysis of Walmart Women’s Shoes",
                theme = shinytheme("cerulean")),
     tabsetPanel(type = "tabs",
-                
                 # ----------------------------------
                 # tab panel 1 - Vignette
                 tabPanel("Vignette",
                          includeMarkdown("../vignettes/vignette.rmd")
                          ),
-                
                 # ----------------------------------
                 # tab panel 2 - Descriptive Analysis by Date (Xubo and Jiarong)
                 tabPanel("Descriptive Analysis by Date",
@@ -166,12 +160,22 @@ ui <- fluidPage(
                            )#mainPanel
                          )#sidebarLayout
                 ),#tabPanel
-                
                 # ----------------------------------
-                # tab panel 3 - Statistical Models (Yunting Chiu)
+                # tab panel 3 - (Shan)
+                tabPanel("Scatterplot",
+                         varSelectInput("varx","X variable",data = month , selected = "sizesUS"),
+                         varSelectInput("vary","Y variable",data = month, selected = "discount"),
+                         plotOutput("plot")),
+                # ----------------------------------
+                # tab panel 4 - (Shan)
+                tabPanel("Month Table",
+                         fluidRow(column(12,
+                                         dataTableOutput("shoes")))
+                ),#tabPanel
+                # ----------------------------------
+                # tab panel 5 - Statistical Models (Yunting)
                 tabPanel("Statistical Models",
-                         helpText("1. This tab panel is showing up top the 500 women's shoes ranked by prices descending order in 2015~2019."),
-                         helpText("2. origPricesXX is means original prices for women's shoes in this year; disPricesXX is means discounted prices for women's shoes in this year. e.g. discPrices16 indicates discounted prices in 2016."),
+                         helpText("This tab panel is showing up top the 500 women's shoes ranked by prices descending order in 2015~2019."),
                          sidebarLayout(
                              sidebarPanel(
                                  varSelectInput("var2X", "X - prices of this year",
@@ -218,6 +222,8 @@ ui <- fluidPage(
                              )#sidebarPanel
                          )#sidebarLayout
                 ), # tabPanel
+                # ----------------------------------
+                # tab panel 6 - Dataset
                 tabPanel("Dataset",
                          dataTableOutput("sheets")
                 )# tabPanel
@@ -225,7 +231,7 @@ ui <- fluidPage(
     
 )#fluidPage
 
-################################## end INPUT ########################################
+################################## end INPUT ######################################################
 
 # SERVER
 server <- function(input, output) {
@@ -254,7 +260,21 @@ server <- function(input, output) {
   })  
 
 ################################## end output Xubo and Jiarong ########################################
+    output$plot <- renderPlot({
+      
+      ggplot(month,aes(x=!!input$varx, y = !!input$vary))+
+        geom_point()+
+        scale_x_log10()+
+        scale_y_log10()+
+        theme_bw()
+    })
     
+    output$shoes<-renderDataTable({
+      colnames(month[map_lgl(month,is.double)])->column_name
+      month%>%
+        select(column_name)
+    },options = list(pagelength=5))
+################################## end output Shan ######################################## 
     output$eda <- renderTable({
        stopifnot(is.numeric(prices[[input$var2X]]) & is.numeric(prices[[input$var2Y]]))
         if(input$log){

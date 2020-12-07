@@ -11,16 +11,16 @@ urlcolor: "blue"
 ---
 ## Walmart Women's Shoes Analysis in Shiny App
 ### Authors
-- **Jiarong Li**, MS Business Analytics at American University
+- **Jiarong Li**, *MS Business Analytics at American University*
   + Find out the top ten brands and colors each year, create a word cloud and complete the price. distribution.
   
-- **Shan Lin**, MS Data Science at American University
+- **Shan Lin**, *MS Data Science at American University*
   + Bivariate analyze the relationship between the two values to facilitate the lady's purchase decision.
   
-- **Xubo Tang**, MS Business Analytics at American University
+- **Xubo Tang**, *MS Business Analytics at American University*
   + Descriptive analysis by date, univariate analysis with data visualization.
   
-- [**Yunting Chiu**](http://linkedin.com/in/yuntingchiu), MS Data Science at American University
+- [**Yunting Chiu**](http://linkedin.com/in/yuntingchiu), *MS Data Science at American University*
   + Tidy and clean data to a readable format. Build statistical inferences for the user interface, such as a t-procedure and a simple linear regression model to compare the prices of two shoes with a different years.
 
 ### Use Cases

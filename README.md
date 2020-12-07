@@ -1,4 +1,8 @@
-# Walmart Women's Shoes Analysis from 2014 to 2019 in Shiny App
+# Walmart Women's Shoes Analysis from 2014 to 2019
+
+# Programming Language
+* R Shiny App
+
 ## Authors
 - Jiarong Li
   + Find out the top ten brands and colors each year, create a word cloud and complete the price. distribution.

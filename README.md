@@ -21,28 +21,25 @@ With the improvement of women’s economic ability and the variability of fashio
 
 ### Required Packages
 1. **`shiny`**: Package shiny version 1.5.0
-The Shiny package helps establish relationships with web applications in R. Help us build programs with minimal effort to develop inputs and outputs.
+- The Shiny package helps establish relationships with web applications in R. Help us build programs with minimal effort to develop inputs and outputs.
 
 2. **`tidyverse`**: Package tidyverse version 1.3.0
-The tidyverse package is a package that helps coordinate work with each other. Installing this package can easily install and load the core package from tidyverse.
+- The tidyverse package is a package that helps coordinate work with each other. Installing this package can easily install and load the core package from tidyverse.
 
 3. **`broom`**: Package broom version 0.7.0
-The broom package accepts the messy output of built-in functions in R, such as lm, NLS, or t-test, and converts them into neat data frames.
+- The broom package accepts the messy output of built-in functions in R, such as lm, NLS, or t-test, and converts them into neat data frames.
 
 4. **`lubridate`**: Package lubridate version 1.7.9
-The lubridate package focuses on the processing of Date-time data.
+- The lubridate package focuses on the processing of Date-time data.
 
 5. **`shinythemes`**: Package shinythemes version 1.1.2
-The Shinythemes package gives the standard style themes of Shiny apps
+- The Shinythemes package gives the standard style themes of Shiny apps
 
 6. **`mosaic`**: Package Mosaic version 1.8.2
-Data sets and utility programs of MOSAIC package for teaching mathematics, statistics, calculations and modeling
+- Data sets and utility programs of MOSAIC package for teaching mathematics, statistics, calculations and modeling
 
 7. **`wordcloud2`**:
-Realize data visualization. Compared with a word cloud, wordcloud2 can more effectively use the interval between words to insert data and draw customized word clouds based on pictures or text.
-
-8. **`Tidytext`**:Package tidytext version 0.2.6
-The Tidytext package implements a clean data separation, making the task of mining data more efficient.
+- Realize data visualization. Compared with a word cloud, wordcloud2 can more effectively use the interval between words to insert data and draw customized word clouds based on pictures or text.
 
 ### Data Sources and Structures
 The [dataset1](https://data.world/datafiniti/womens-shoe-prices/workspace/file?filename=Datafiniti_Womens_Shoes_Jun19.csv) [dataset2](https://data.world/datafiniti/womens-shoe-prices/workspace/file?filename=7003_1.csv) and [dataset3](https://data.world/datafiniti/womens-shoe-prices/workspace/file?filename=Datafiniti_Womens_Shoes.csv) are from the [Data.World](https://data.world/) and created by Datafiniti. We combined these 3 datasets into one dataset.

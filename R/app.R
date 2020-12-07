@@ -1,6 +1,6 @@
 # Shiny App for STAT-613 final project at American University
 # Date: Dec 05, 2020
-# Analysis of Walmart Women’s Shoes 
+# Walmart Women's Shoes Analysis from 2014 to 2019 
 
 # Installing libraries
 library(shiny)

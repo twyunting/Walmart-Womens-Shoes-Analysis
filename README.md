@@ -3,20 +3,23 @@
 ## Programming Language
 * R Shiny App
 
-## Authors
+### Authors
 - **Jiarong Li**, MS Business Analytics at American University
   + Find out the top ten brands and colors each year, create a word cloud and complete the price. distribution.
+  
 - **Shan Lin**, MS Data Science at American University
   + Bivariate analyze the relationship between the two values to facilitate the lady's purchase decision.
+  
 - **Xubo Tang**, MS Business Analytics at American University
   + Descriptive analysis by date, univariate analysis with data visualization.
+  
 - [**Yunting Chiu**](http://linkedin.com/in/yuntingchiu), MS Data Science at American University
-  + Tidy and clean data to a readable format. Build statistical inferences for the user interface, such as a t-procedure and a simple linear regression model to compare the prices of two shoes with a different year.
+  + Tidy and clean data to a readable format. Build statistical inferences for the user interface, such as a t-procedure and a simple linear regression model to compare the prices of two shoes with a different years.
 
-## Use Cases
+### Use Cases
 With the improvement of women’s economic ability and the variability of fashion demands, women’ shoes have become an important part of the footwear market as their demands for shoes increased. Some problems with meaningful business insights are brought to the attention of related parties, such as analysts, vendors and their customers: What is the average price of each distinct brand? Which brands have the highest prices? Which one has the widest distribution of prices? Is there a typical price distribution (e.g., normal) across brands or within specific brands? Is there an obvious difference in price between online and in store? The Shiny App of this project aimed to answer these questions and is used to determine brand markups, pricing strategies, and trends for luxury shoes.
 
-## Required Packages
+### Required Packages
 1. **`shiny`**: Package shiny version 1.5.0
 The Shiny package helps establish relationships with web applications in R. Help us build programs with minimal effort to develop inputs and outputs.
 
@@ -41,7 +44,7 @@ Realize data visualization. Compared with a word cloud, wordcloud2 can more effe
 8. **`Tidytext`**:Package tidytext version 0.2.6
 The Tidytext package implements a clean data separation, making the task of mining data more efficient.
 
-## Data Sources and Structures
+### Data Sources and Structures
 The [dataset1](https://data.world/datafiniti/womens-shoe-prices/workspace/file?filename=Datafiniti_Womens_Shoes_Jun19.csv) [dataset2](https://data.world/datafiniti/womens-shoe-prices/workspace/file?filename=7003_1.csv) and [dataset3](https://data.world/datafiniti/womens-shoe-prices/workspace/file?filename=Datafiniti_Womens_Shoes.csv) are from the [Data.World](https://data.world/) and created by Datafiniti. We combined these 3 datasets into one dataset.
 
 The newest Datasets were updated in 2019, which is a list of 10,000 women's shoes in Walmart stores between March 2019 and May 2019. There are 29 variables which contain price, brand, manufacture, ID, price discount, price size, shoes size, date created, image URL and so on. 
@@ -52,7 +55,7 @@ Finally, the third dataset was updated in 2017, which is a list of 19,045 rows i
 
 After going through the dataset, there are some variables could be used for analysis: `dataadded`, `brand`, `categories`, `colors`, `manufacturer`, `price`, `price.color`, `price.offer`(channel and discount), `price.size`, `sizes` and so on. So we decided to remain these variables and merge three datasets to one data frame.
 
-## Data Types and Variables
+### Data Types and Variables
 After we tided and cleaned data, the data frame comprises 12 variables and 39,045 observations from 2014 to 2019 with the following descriptions:
 
 1. `date`: `<Date>` date added between 2014 to 2019.
@@ -68,7 +71,7 @@ After we tided and cleaned data, the data frame comprises 12 variables and 39,04
 11. `discount`: `<dbl>` the discounted percentage * 100. e.g. 70 is 70 % off
 12. `prices.discounted`: `<dbl>` after discounted shoe prices in USD
 
-## Exploratory Data Analysis Inputs, Controls, and Outputs
+### Exploratory Data Analysis Inputs, Controls, and Outputs
 For this case, the APP totally has 6 panels: vignette, descriptive analysis by date, scatter plots between two variables, month table, statistical models, and data table. The second to fourth panels are for EDA, and the fifth panel is for statistical analysis. In this part, we will focus on the 2-4 panels' inputs, controls, and outputs.
 
 1. **Vignette**: Overall information about the R Shiny APP.
@@ -79,7 +82,7 @@ For this case, the APP totally has 6 panels: vignette, descriptive analysis by d
 
 4. **Month Table**: we would like to take a look on the dataset itself. The table is used to find the information by month as needed. Besides, it is used to sort a column in ascending or descending order to quick understand the data structure.
 
-## Statistical Analysis Inputs, Controls, and Outputs
+### Statistical Analysis Inputs, Controls, and Outputs
 
 Like the last part introduced, we totally have 6 panels, and the fifth panel is for statistical analysis. In this part, we will focus on the statistical inferences's inputs, controls, and outputs. 
 
@@ -87,11 +90,9 @@ Like the last part introduced, we totally have 6 panels, and the fifth panel is 
 
 6. **Data**: This table shows full data with 12 variables and 39,045 observations.
 
-## References 
+### References 
 - EU to US shoe size: Conversion charts for women, men &amp; kids. (n.d.). Retrieved November 01, 2020, from https://www.blitzresults.com/en/shoe-size-euro/
 - Learn generalized linear models (GLM) using R. (n.d.). Retrieved December 07, 2020, from https://www.kdnuggets.com/2017/10/learn-generalized-linear-models-glm-r.html/2
 - Parametric statistics. (2020, October 19). Retrieved December 03, 2020, from https://en.wikipedia.org/wiki/Parametric_statistics
 - Wasserstein, R., & Lazar, N. (2016). The ASA statement on p-values: context, process, and purpose. *The American Statistician, 70*(2), 129–133. https://doi.org/10.1080/00031305.2016.1154108
 - Women's shoe prices - dataset by Datafiniti. (2019, June 25). Retrieved October 26, 2020, from https://data.world/datafiniti/womens-shoe-prices/workspace/file?filename=Datafiniti_Womens_Shoes_Jun19.csv
-
-

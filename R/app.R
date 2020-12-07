@@ -162,13 +162,13 @@ ui <- fluidPage(
                 ),#tabPanel
                 # ----------------------------------
                 # tab panel 3 - (Shan)
-                tabPanel("Scatterplot",
+                tabPanel("Scatterplots",
                          varSelectInput("varx","X variable",data = month , selected = "sizesUS"),
                          varSelectInput("vary","Y variable",data = month, selected = "discount"),
                          plotOutput("plot")),
                 # ----------------------------------
                 # tab panel 4 - (Shan)
-                tabPanel("Months Table",
+                tabPanel("Month Table",
                          fluidRow(column(12,
                                          dataTableOutput("shoes")))
                 ),#tabPanel

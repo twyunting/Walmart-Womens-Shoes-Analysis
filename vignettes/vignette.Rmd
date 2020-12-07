@@ -14,7 +14,7 @@ urlcolor: "blue"
   + Find out the top ten brands and colors each year, create a word cloud and complete the price. distribution.
   
 - **Shan Lin**, MS Data Science at American University
-  + Analyze the relationship between the two values to facilitate the lady's purchase decision.
+  + Bivariate analyze the relationship between the two values to facilitate the lady's purchase decision.
   
 - **Xubo Tang**, MS Business Analytics at American University
   + Descriptive analysis by date, univariate analysis with data visualization.
@@ -59,10 +59,10 @@ Besides, the second dataset was updated in 2018, which is a list of 10,000 women
 
 Finally, the third dataset was updated in 2017, which is a list of 19,045 rows in table. There are 47 variables which contain id, asins, brand, categories, colors, count, dataadded, dataupdated, descriptions, dimension, ean, features, flavors, imageurls, isbn, keys, manufacturer, manufacturernumber, merchants, name, prices_amountmax, prices_availability, prices_source, prices_sourceurls, prices_warranty, quantities, reviews, sizes, skus, sourceurls, upc, websiteids, weight and so on.
 
-After going through the dataset, there are some variables could be used for analysis: `dataadded`, `brand`, `categories`, `colors`, `manufacturer`, `price`, `price.color`, `price.offer`(channel and discount), `price.size`, `sizes` and so on. So we decided to remain these variables and merge three datasets to one dataframe.
+After going through the dataset, there are some variables could be used for analysis: `dataadded`, `brand`, `categories`, `colors`, `manufacturer`, `price`, `price.color`, `price.offer`(channel and discount), `price.size`, `sizes` and so on. So we decided to remain these variables and merge three datasets to one data frame.
 
 ## Data Types and Variables
-After we have tided and cleaned data, the data frame comprises 12 variables and 39,045 observations from 2014 to 2019 with the following descriptions:
+After we tided and cleaned data, the data frame comprises 12 variables and 39,045 observations from 2014 to 2019 with the following descriptions:
 
 1. `date`: `<Date>` date added between 2014 to 2019.
 2. `time`: `<S4: Period>` date added between by hour-minutes-second format
@@ -78,23 +78,23 @@ After we have tided and cleaned data, the data frame comprises 12 variables and 
 12. `prices.discounted`: `<dbl>` after discounted shoe prices in USD
 
 ## Exploratory Data Analysis Inputs, Controls, and Outputs
-For this case, we totally have 6 panels: vignette, descriptive analysis by date, scatter plots between two variables, month table, statistical models, and data table. The second to fourth panels are for EDA, and the fifth panel is for statistical analysis. In this part, we will focus on the 2-4 panels' inputs, controls, and outputs.
+For this case, the APP totally has 6 panels: vignette, descriptive analysis by date, scatter plots between two variables, month table, statistical models, and data table. The second to fourth panels are for EDA, and the fifth panel is for statistical analysis. In this part, we will focus on the 2-4 panels' inputs, controls, and outputs.
 
-**Vignette**: Overall information about the R Shiny APP.
+1. **Vignette**: Overall information about the R Shiny APP.
 
-**Descriptive Analysis by Date**: In this panel, we want to give the vendors and customers an overall understanding on what happened within a certain date range. So in this panel, the input is very simple: date range. The main outputs are brand sales ranking, color cloud and price distribution. It can show which brand is the most popular within a certain time? What is the fashion color within a certain time? What is the price distribution within a certain time? This segment helps users to receive solutions.
+2. **Descriptive Analysis by Date**: In this panel, we want to give the vendors and customers an overall understanding on what happened within a certain date range. So in this panel, the input is very simple: date range. The main outputs are brand sales ranking, color cloud and price distribution. It can show which brand is the most popular within a certain time? What is the fashion color within a certain time? What is the price distribution within a certain time? This segment helps users to receive solutions.
 
-**Scatterplots**: In this panel, we want to know the relationship between *x* and *y* variables. It is significant to know the correlation between variables for further statistical analysis. The inputs are *varX* and *varY*. The output is the scatter plot between these two variables. According to the output, we could know the correlation between variables.
+3. **Scatterplots**: In this panel, we want to know the relationship between *x* and *y* variables. It is significant to know the correlation between variables for further statistical analysis. The inputs are *varX* and *varY*. The output is the scatter plot between these two variables. According to the output, we could know the correlation between variables.
 
-**Month Table**: we would like to take a look on the dataset itself. The table is used to find the information by month as needed. Besides, it is used to sort a column in ascending or descending order to quick understand the data structure.
+4. **Month Table**: we would like to take a look on the dataset itself. The table is used to find the information by month as needed. Besides, it is used to sort a column in ascending or descending order to quick understand the data structure.
 
 ## Statistical Analysis Inputs, Controls, and Outputs
 
 Like the last part introduced, we totally have 6 panels, and the fifth panel is for statistical analysis. In this part, we will focus on the statistical inferences's inputs, controls, and outputs. 
 
-**Statistical Models**: we will only focus on data from 2015 to 2019 because there are only 84 observations in 2014. Based on the dataset, we would like to see is there any difference between two variables by using t-test and to use simple linear regression to see the linear associations in the panel. First, exploratory data analysis. In this method, users can see the basic information for each variable. For instance, mean, max, standard deviation and so on. Second, data transformation. If *x* and *y* have not met assumptions, we can consider using logarithm by changing a *x* variable and a *y* variable. Third, two-sided t-test. We used two sample t-test to analyze if there is a significant difference between *x* and *y* variable with 95 % confidence intervals. Finally, simple linear regression. By using this method, we can find the linear association between *x* and *y* variables. If there is a relationship between x and y, we can see the summary table to explain the OLS relationship between two variables.
+5. **Statistical Models**: we will only focus on data from 2015 to 2019 because there are only 84 observations in 2014. Based on the dataset, we would like to see is there any difference between two variables by using t-test and to use simple linear regression to see the linear associations in the panel. First, exploratory data analysis. In this method, users can see the basic information for each variable. For instance, mean, max, standard deviation and so on. Second, data transformation. If *x* and *y* have not met assumptions, we can consider using logarithm by changing a *x* variable and a *y* variable. Third, two-sided t-test. We used two sample t-test to analyze if there is a significant difference between *x* and *y* variable with 95 % confidence intervals. Finally, simple linear regression. By using this method, we can find the linear association between *x* and *y* variables. If there is a relationship between x and y, we can see the summary table to explain the OLS relationship between two variables.
 
-**Data**: This table shows full data with 12 variables and 39,045 observations.
+6. **Data**: This table shows full data with 12 variables and 39,045 observations.
 
 ## References 
 - EU to US shoe size: Conversion charts for women, men &amp; kids. (n.d.). Retrieved November 01, 2020, from https://www.blitzresults.com/en/shoe-size-euro/

@@ -5,8 +5,8 @@ account: twyunting
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 3368055
-bundleId: 3956549
+bundleId: 3956876
 url: https://twyunting.shinyapps.io/WalmartWomenShoes/
-when: 1607368666.22818
+when: 1607373636.11573
 asMultiple: FALSE
 asStatic: FALSE

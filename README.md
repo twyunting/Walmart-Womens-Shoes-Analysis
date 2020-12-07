@@ -3,9 +3,6 @@
 ## Programming Language
 * R Shiny App
 
-## Open with Web Browser
-* 
-
 ## Authors
 - **Jiarong Li**, MS Business Analytics at American University
   + Find out the top ten brands and colors each year, create a word cloud and complete the price. distribution.
@@ -72,7 +69,7 @@ After we tided and cleaned data, the data frame comprises 12 variables and 39,04
 12. `prices.discounted`: `<dbl>` after discounted shoe prices in USD
 
 ## Exploratory Data Analysis Inputs, Controls, and Outputs
-For this case, the APP totally have 6 panels: vignette, descriptive analysis by date, scatter plots between two variables, month table, statistical models, and data table. The second to fourth panels are for EDA, and the fifth panel is for statistical analysis. In this part, we will focus on the 2-4 panels' inputs, controls, and outputs.
+For this case, the APP totally has 6 panels: vignette, descriptive analysis by date, scatter plots between two variables, month table, statistical models, and data table. The second to fourth panels are for EDA, and the fifth panel is for statistical analysis. In this part, we will focus on the 2-4 panels' inputs, controls, and outputs.
 
 1. **Vignette**: Overall information about the R Shiny APP.
 

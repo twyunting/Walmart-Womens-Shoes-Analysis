@@ -129,8 +129,8 @@ ws2015 %>%
 
 # input 
 ui <- fluidPage(
-    navbarPage("Analysis of Walmart Women’s Shoes",
-               windowTitle = "The analysis of Walmart Women’s Shoes",
+    navbarPage("Walmart Women's Shoes Analysis",
+               windowTitle = "Walmart Women's Shoes Analysis",
                theme = shinytheme("cerulean")),
     tabsetPanel(type = "tabs",
                 # ----------------------------------
@@ -175,13 +175,13 @@ ui <- fluidPage(
                 # ----------------------------------
                 # tab panel 5 - Statistical Models (Yunting)
                 tabPanel("Statistical Models",
-                         helpText("This tab panel is showing up top the 500 women's shoes ranked by prices descending order in 2015~2019."),
+                         helpText("This tab panel is showing up the top 500 women's shoes ranked by prices descending order in 2015~2019."),
                          sidebarLayout(
                              sidebarPanel(
                                  varSelectInput("var2X", "X - prices of this year",
-                                                data = prices, selected = "origPrices19"),
+                                                data = prices, selected = "Original_Prices_2019"),
                                  varSelectInput("var2Y", "Y - prices of this year",
-                                                data = prices, selected = "discPrices19"),
+                                                data = prices, selected = "Discounted_Prices_2019"),
                                  checkboxInput("log", "Log Transformation"),
                                  checkboxInput("t", "T-Procedures"),
                                  checkboxInput("slr", "Simple Linear Regression"),
@@ -224,7 +224,7 @@ ui <- fluidPage(
                 ), # tabPanel
                 # ----------------------------------
                 # tab panel 6 - Dataset
-                tabPanel("Dataset",
+                tabPanel("Data",
                          dataTableOutput("sheets")
                 )# tabPanel
     ),# tabsetPanel

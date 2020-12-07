@@ -10,9 +10,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-<meta name="author" content="Yunting Chiu" />
 
-<meta name="date" content="2020-12-03" />
+<meta name="date" content="2020-12-07" />
 
 <title>Vignette of Shiny App</title>
 
@@ -230,38 +229,79 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 <h1 class="title toc-ignore">Vignette of Shiny App</h1>
-<h4 class="author">Yunting Chiu</h4>
-<h4 class="date">2020-12-03</h4>
+<h3 class="subtitle">Walmart Women’s Shoes Analysis from 2014 to 2019</h3>
+<h4 class="date">2020-12-07</h4>
 
 
 
-<div id="the-analysis-of-walmart-womens-shoes-between-2014-to-2019" class="section level2">
-<h2>The analysis of Walmart Women’s Shoes between 2014 to 2019</h2>
-</div>
 <div id="authors" class="section level2">
 <h2>Authors</h2>
 <ul>
-<li>Jiarong Li</li>
-<li>Shan Lin</li>
-<li>Xubo Tang</li>
-<li><a href="http://linkedin.com/in/yuntingchiu">Yunting Chiu</a></li>
+<li>Jiarong Li
+<ul>
+<li>Find out the top ten brands and colors each year, create a word cloud and complete the price. distribution.</li>
+</ul></li>
+<li>Shan Lin
+<ul>
+<li>Analyze the relationship between the two values to facilitate the lady’s purchase decision.</li>
+</ul></li>
+<li>Xubo Tang
+<ul>
+<li>Descriptive analysis by date, univariate analysis with data visualization.</li>
+</ul></li>
+<li><a href="http://linkedin.com/in/yuntingchiu">Yunting Chiu</a>
+<ul>
+<li>Tidy and clean data to a readable format. Build statistical inferences for the user interface, such as a t-procedure and a simple linear regression model to compare the prices of two shoes with a different year.</li>
+</ul></li>
 </ul>
 </div>
-<div id="motivation" class="section level2">
-<h2>Motivation</h2>
+<div id="use-case" class="section level2">
+<h2>Use Case</h2>
 <p>With the improvement of women’s economic ability and the variability of fashion demands, women’ shoes have become an important part of the footwear market as their demands for shoes increased. Some problems with meaningful business insights are brought to the attention of related parties, such as analysts, vendors and their customers: What is the average price of each distinct brand? Which brands have the highest prices? Which one has the widest distribution of prices? Is there a typical price distribution (e.g., normal) across brands or within specific brands? Is there an obvious difference in price between online and in store? The Shiny App of this project aimed to answer these questions and is used to determine brand markups, pricing strategies, and trends for luxury shoes.</p>
 </div>
-<div id="data-sources" class="section level2">
-<h2>Data sources</h2>
-<p>The <a href="https://data.world/datafiniti/womens-shoe-prices/workspace/file?filename=Datafiniti_Womens_Shoes_Jun19.csv">dataset</a> is from the <a href="https://data.world/">Data.World</a> and created by Datafiniti. Datasets were updated in 2019, which is a list of more than 35.000 women’s shoes in Walmart stores. There are 29 variables which contain price, brand, manufacture, ID, price discount, price size, shoes size, date created, image URL and so on. After going through the datasets, there are some variables that can be analyzed: price, brand, manufacture and price offer. We join three separate datasets in one, and rearrange the date in chronological order, extract the prices of the shoes, and measure the price of the shoes after discount.</p>
+<div id="required-packages" class="section level2">
+<h2>Required Packages</h2>
+<ol style="list-style-type: decimal">
+<li><p><strong>shiny</strong>：Package shiny version 1.5.0 The Shiny package helps establish relationships with web applications in R. Help us build programs with minimal effort to develop inputs and outputs.</p></li>
+<li><p><strong>tidyverse</strong>：Package tidyverse version 1.3.0 The tidyverse package is a package that helps coordinate work with each other. Installing this package can easily install and load the core package from tidyverse.</p></li>
+<li><p><strong>broom</strong>：Package broom version 0.7.0 The broom package accepts the messy output of built-in functions in R, such as lm, NLS, or t-test, and converts them into neat data frames.</p></li>
+<li><p><strong>lubridate</strong>：Package lubridate version 1.7.9 The lubridate package focuses on the processing of Date-time data.</p></li>
+<li><p><strong>shinythemes</strong>：Package shinythemes version 1.1.2 The Shinythemes package gives the standard style themes of Shiny apps</p></li>
+<li><p><strong>mosaic</strong>：Package Mosaic version 1.8.2 Data sets and utility programs of MOSAIC package for teaching mathematics, statistics, calculations and modeling</p></li>
+<li><p><strong>wordcloud2</strong>： Realize data visualization. Compared with a word cloud, wordcloud2 can more effectively use the interval between words to insert data and draw customized word clouds based on pictures or text.</p></li>
+<li><p><strong>Tidytext</strong>：Package tidytext version 0.2.6 The Tidytext package implements a clean data separation, making the task of mining data more efficient.</p></li>
+</ol>
+</div>
+<div id="data-sources-and-structures" class="section level2">
+<h2>Data Sources and Structures</h2>
+<p>The <a href="https://data.world/datafiniti/womens-shoe-prices/workspace/file?filename=Datafiniti_Womens_Shoes_Jun19.csv">dataset1</a> <a href="https://data.world/datafiniti/womens-shoe-prices/workspace/file?filename=7003_1.csv">dataset2</a> and <a href="https://data.world/datafiniti/womens-shoe-prices/workspace/file?filename=Datafiniti_Womens_Shoes.csv">dataset3</a> are from the <a href="https://data.world/">Data.World</a> and created by Datafiniti. We combined these 3 datasets into one dataset.</p>
+<p>The newest Datasets were updated in 2019, which is a list of 10,000 women’s shoes in Walmart stores between March 2019 and May 2019. There are 29 variables which contain price, brand, manufacture, ID, price discount, price size, shoes size, date created, image URL and so on.</p>
+<p>Besides, the second dataset was updated in 2018, which is a list of 10,000 women’s shoes in Walmart stores between January 2018 to October 2018. There are 34 variables which contain id, dataadded, dateupdated, asins, brand, categories, primarycategories, colors, dimension, imageurls, keys, manufacturer, manufacturernumber, name, prices_amountmax, prices_availability, prices_color, prices_condition, prices_currency, prices_dataadded sizes, sourceurls, upc, weight, and so on.</p>
+<p>Finally, the third dataset was updated in 2017, which is a list of 19,045 rows in table. There are 47 variables which contain id, asins, brand, categories, colors, count, dataadded, dataupdated, descriptions, dimension, ean, features, flavors, imageurls, isbn, keys, manufacturer, manufacturernumber, merchants, name, prices_amountmax, prices_availability, prices_source, prices_sourceurls, prices_warranty, quantities, reviews, sizes, skus, sourceurls, upc, websiteids, weight and so on.</p>
+<p>After going through the dataset, there are some variables could be used for analysis: dataadded, brand, categories, colors, manufacturer, price, price.color, price.offer(channel and discount), price.size, sizes and so on. So we decided to remain these variables and merge three datasets then tidy and clean into a one data frame with 12 variables and 39,045 observations from 2014 to 2019.</p>
+</div>
+<div id="exploratory-data-analysis-inputs-controls-and-outputs" class="section level2">
+<h2>Exploratory Data Analysis Inputs, Controls, and Outputs</h2>
+<p>For this case, we totally have 6 panels: vignette, descriptive analysis by date, scatter plots between two variables, month table, statistical models, and data table. The second to fourth panels are for EDA, and the fifth panel is for statistical analysis. In this part, we will focus on the 2-4 panels’ inputs, controls, and outputs.</p>
+<p><strong>Vignette</strong>: Overall information about the R Shiny APP.</p>
+<p><strong>Descriptive Analysis by Date</strong>: In this panel, we want to give the vendors and customers an overall understanding on what happened within a certain date range. So in this panel, the input is very simple: date range. The main outputs are brand sales ranking, color cloud and price distribution. It can show which brand is the most popular within a certain time? What is the fashion color within a certain time? What is the price distribution within a certain time? This segment helps users to receive solutions.</p>
+<p><strong>Scatterplots</strong>: In this panel, we want to know the relationship between <em>x</em> and <em>y</em> variables. It is significant to know the correlation between variables for further statistical analysis. The inputs are <em>varX</em> and <em>varY</em>. The output is the scatter plot between these two variables. According to the output, we could know the correlation between variables.</p>
+<p><strong>Month Table</strong>: we would like to take a look on the dataset itself. The table is used to find the information by month as needed. Besides, it is used to sort a column in ascending or descending order to quick understand the data structure.</p>
+</div>
+<div id="statistical-analysis-inputs-controls-and-outputs" class="section level2">
+<h2>Statistical Analysis Inputs, Controls, and Outputs</h2>
+<p>Like the last part introduced, we totally have 6 panels, and the fifth panel is for statistical analysis. In this part, we will focus on the statistical inferences’s inputs, controls, and outputs.</p>
+<p><strong>Statistical Models</strong>: we will only focus on data from 2015 to 2019 because there are only 84 observations in 2014. Based on the dataset, we would like to see is there any difference between two variables by using t-test and to use simple linear regression to see the linear associations in the panel. First, exploratory data analysis. In this method, users can see the basic information for each variable. For instance, mean, max, standard deviation and so on. Second, data transformation. If x and y have not met assumptions, we can consider using logarithm by changing a <em>x</em> variable and a <em>y</em> variable. Third, two-sided t-test. We used two sample t-test to analyze if there is a significant difference between <em>x</em> and <em>y</em> variable with 95 % confidence intervals. Finally, simple linear regression. By using this method, we can find the linear association between <em>x</em> and <em>y</em> variables. If there is a relationship between x and y, we can see the summary table to explain the OLS relationship between two variables.</p>
+<p><strong>Data</strong>: This table shows full data with 12 variables and 39,045 observations.</p>
 </div>
 <div id="references" class="section level2">
 <h2>References</h2>
 <ul>
 <li>EU to US shoe size: Conversion charts for women, men &amp; kids. (n.d.). Retrieved November 01, 2020, from <a href="https://www.blitzresults.com/en/shoe-size-euro/" class="uri">https://www.blitzresults.com/en/shoe-size-euro/</a></li>
-<li>Wasserstein, R., &amp; Lazar, N. (2016). The ASA statement on p -Values: Context, Process, and Purpose. <em>The American Statistician, 70</em>(2), 129–133. <a href="https://doi.org/10.1080/00031305.2016.1154108" class="uri">https://doi.org/10.1080/00031305.2016.1154108</a></li>
+<li>Learn generalized linear models (GLM) using R. (n.d.). Retrieved December 07, 2020, from <a href="https://www.kdnuggets.com/2017/10/learn-generalized-linear-models-glm-r.html/2" class="uri">https://www.kdnuggets.com/2017/10/learn-generalized-linear-models-glm-r.html/2</a></li>
 <li>Parametric statistics. (2020, October 19). Retrieved December 03, 2020, from <a href="https://en.wikipedia.org/wiki/Parametric_statistics" class="uri">https://en.wikipedia.org/wiki/Parametric_statistics</a></li>
-<li>Women’s Shoe Prices - dataset by Datafiniti. (2019, June 25). Retrieved October 26, 2020, from <a href="https://data.world/datafiniti/womens-shoe-prices/workspace/file?filename=Datafiniti_Womens_Shoes_Jun19.csv" class="uri">https://data.world/datafiniti/womens-shoe-prices/workspace/file?filename=Datafiniti_Womens_Shoes_Jun19.csv</a></li>
+<li>Wasserstein, R., &amp; Lazar, N. (2016). The ASA statement on p-values: context, process, and purpose. <em>The American Statistician, 70</em>(2), 129–133. <a href="https://doi.org/10.1080/00031305.2016.1154108" class="uri">https://doi.org/10.1080/00031305.2016.1154108</a></li>
+<li>Women’s shoe prices - dataset by Datafiniti. (2019, June 25). Retrieved October 26, 2020, from <a href="https://data.world/datafiniti/womens-shoe-prices/workspace/file?filename=Datafiniti_Womens_Shoes_Jun19.csv" class="uri">https://data.world/datafiniti/womens-shoe-prices/workspace/file?filename=Datafiniti_Womens_Shoes_Jun19.csv</a></li>
 </ul>
 </div>
 

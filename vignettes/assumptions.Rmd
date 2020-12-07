@@ -22,4 +22,7 @@ Parametric statistics is a branch of statistics which assumes that sample data c
 - Linear association between (mean) y and x. That is, residual : ri = yi - yhat i.
 
 
+![](../pics/slrTable.png)
+
+
 

@@ -14,7 +14,7 @@
   + Descriptive analysis by date, univariate analysis with data visualization.
   
 - [**Yunting Chiu**](http://linkedin.com/in/yuntingchiu), *MS Data Science at American University*
-  + Tidy and clean data to a readable format. Build statistical inferences for the user interface, such as a t-procedure and a simple linear regression model to compare the prices of two shoes with a different years.
+  + Tidy and clean data to a readable format solely. Build statistical inferences for the user interface, such as a t-procedure and a simple linear regression model to compare the prices of two shoes with a different years.
 
 ### Use Cases
 With the improvement of women’s economic ability and the variability of fashion demands, women’ shoes have become an important part of the footwear market as their demands for shoes increased. Some problems with meaningful business insights are brought to the attention of related parties, such as analysts, vendors and their customers: What is the average price of each distinct brand? Which brands have the highest prices? Which one has the widest distribution of prices? Is there a typical price distribution (e.g., normal) across brands or within specific brands? Is there an obvious difference in price between online and in store? The Shiny App of this project aimed to answer these questions and is used to determine brand markups, pricing strategies, and trends for luxury shoes.
@@ -81,6 +81,7 @@ Like the last part introduced, we totally have 6 panels, and the fifth panel is 
 6. **Data**: This table shows full data with 12 variables and 39,045 observations.
 
 ### References 
+- Awesome Walmart Wallpapers. (n.d.). Retrieved December 07, 2020, from https://wallpaperaccess.com/walmart
 - EU to US shoe size: Conversion charts for women, men &amp; kids. (n.d.). Retrieved November 01, 2020, from https://www.blitzresults.com/en/shoe-size-euro/
 - Learn generalized linear models (GLM) using R. (n.d.). Retrieved December 07, 2020, from https://www.kdnuggets.com/2017/10/learn-generalized-linear-models-glm-r.html/2
 - Parametric statistics. (2020, October 19). Retrieved December 03, 2020, from https://en.wikipedia.org/wiki/Parametric_statistics

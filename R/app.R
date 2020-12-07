@@ -168,7 +168,7 @@ ui <- fluidPage(
                          plotOutput("plot")),
                 # ----------------------------------
                 # tab panel 4 - (Shan)
-                tabPanel("Month Table",
+                tabPanel("Months Table",
                          fluidRow(column(12,
                                          dataTableOutput("shoes")))
                 ),#tabPanel

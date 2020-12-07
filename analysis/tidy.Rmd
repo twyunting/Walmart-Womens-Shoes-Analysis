@@ -80,6 +80,7 @@ ws %>%
   filter(!is.na(origPrices)) -> wsRegression
 
 wsRegression 
+str(ws)
 ```
 - guiding how to filter out the year
 ```{r}

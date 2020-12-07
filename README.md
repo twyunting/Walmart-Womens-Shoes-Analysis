@@ -2,8 +2,8 @@
 
 ![](pics/walmart.jpg)
 
-## Programming Language
-* R Shiny App
+### Programming Language
+![](pics/ricon.png)
 
 ### Authors
 - **Jiarong Li**, *MS Business Analytics at American University*
@@ -87,5 +87,6 @@ Like the last part introduced, we totally have 6 panels, and the fifth panel is 
 - EU to US shoe size: Conversion charts for women, men &amp; kids. (n.d.). Retrieved November 01, 2020, from https://www.blitzresults.com/en/shoe-size-euro/
 - Learn generalized linear models (GLM) using R. (n.d.). Retrieved December 07, 2020, from https://www.kdnuggets.com/2017/10/learn-generalized-linear-models-glm-r.html/2
 - Parametric statistics. (2020, October 19). Retrieved December 03, 2020, from https://en.wikipedia.org/wiki/Parametric_statistics
+- Ten random useful things in R that you might not know about. Retrieved December 07, 2020, from https://www.elasticfeed.com/ab4da588234cfa0cabc5373f0b69ae5e/
 - Wasserstein, R., & Lazar, N. (2016). The ASA statement on p-values: context, process, and purpose. *The American Statistician, 70*(2), 129–133. https://doi.org/10.1080/00031305.2016.1154108
 - Women's shoe prices - dataset by Datafiniti. (2019, June 25). Retrieved October 26, 2020, from https://data.world/datafiniti/womens-shoe-prices/workspace/file?filename=Datafiniti_Womens_Shoes_Jun19.csv

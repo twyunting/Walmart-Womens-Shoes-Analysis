@@ -46,7 +46,7 @@ With the improvement of women’s economic ability and the variability of fashio
 
 7. **`wordcloud2`**: Realize data visualization. Compared with a word cloud, wordcloud2 can more effectively use the interval between words to insert data and draw customized word clouds based on pictures or text.
 
-8. **`Tidytext`**：Package tidytext version 0.2.6. The Tidytext package implements a clean data separation, making the task of mining data more efficient.
+8. **`tidytext`**：Package tidytext version 0.2.6. The Tidytext package implements a clean data separation, making the task of mining data more efficient.
 
 ### Data Sources and Structures
 The [dataset1](https://data.world/datafiniti/womens-shoe-prices/workspace/file?filename=Datafiniti_Womens_Shoes_Jun19.csv) [dataset2](https://data.world/datafiniti/womens-shoe-prices/workspace/file?filename=7003_1.csv) and [dataset3](https://data.world/datafiniti/womens-shoe-prices/workspace/file?filename=Datafiniti_Womens_Shoes.csv) are from the [Data.World](https://data.world/) and created by Datafiniti. We combined these 3 datasets into one dataset.

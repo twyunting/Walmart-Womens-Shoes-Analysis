@@ -1,8 +1,3 @@
----
-output:
-  pdf_document: default
-  html_document: default
----
 # MIT License
 
 Copyright (c) 2020 Yunting Chiu

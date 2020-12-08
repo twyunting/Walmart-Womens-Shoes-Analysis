@@ -3,7 +3,7 @@
 
 ![](pics/walmart.jpg)
 
-### Programming Language
+### Programming Language and Development Resources
 ![](pics/ricon.png)
 
 ### Authors

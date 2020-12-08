@@ -328,12 +328,13 @@ server <- function(input, output) {
             geom_histogram() +
             scale_x_log10() +
             theme_bw() +
-            ggtitle("Find the Normality of a Histogram")
+            ggtitle("Find the Normality of a Histogram") +
+            labs(x = paste("Log(",input$var2X,")"))
         }else if(!input$log){
           ggplot(data = prices ,aes(x = !!input$var2X)) +
             geom_histogram() +
             theme_bw() +
-            ggtitle("Find the Normality of a Histogram")
+            ggtitle("Find the Normality of a Histogram") 
         }
       }
     })# renderTable 
@@ -346,12 +347,13 @@ server <- function(input, output) {
             geom_histogram() +
             scale_x_log10() +
             theme_bw() +
-            ggtitle("Find the Normality of a Histogram")
+            ggtitle("Find the Normality of a Histogram") +
+            labs(x = paste("Log(",input$var2Y,")"))
         }else if(!input$log){
           ggplot(data = prices ,aes(x = !!input$var2Y)) +
             geom_histogram() +
             theme_bw() +
-            ggtitle("Find the Normality of a Histogram")
+            ggtitle("Find the Normality of a Histogram") 
         }
       }
     })# renderTable 

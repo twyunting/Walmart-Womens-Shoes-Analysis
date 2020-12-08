@@ -8,16 +8,16 @@
 
 ### Authors and Assigning Roles
 - [**Yunting Chiu**](http://linkedin.com/in/yuntingchiu), *MS Data Science at American University*
-  + Tidy and clean data to a readable format. Build statistical inferences for the user interface, such as a t-procedure and a simple linear regression model to compare the shoes price with different years.
+  + Tidy and clean data to a readable format. Build statistical inferences for the user interface. Using parametric methods: t-procedure and simple linear regression model to compare the price of shoes with different years.
   
 - **Jiarong Li**, *MS Business Analytics at American University*
   + Find out the top ten brands and colors each year, create a word cloud and complete the price distribution.
   
 - **Shan Lin**, *MS Data Science at American University*
-  + Bivariate analyze the relationship between the two values to facilitate the lady's purchase decision.
+  + Bivariate analyze the relationship between the two values to facilitate the lady's purchase decision. Focus on whether the particular month affects the brands and shoe prices.
   
 - **Xubo Tang**, *MS Business Analytics at American University*
-  + Descriptive analysis by date, univariate analysis with data visualization.
+  + Descriptive analysis by date, univariate analysis with data visualization. Lead to write vignette to document the R Shiny application.
 
 ### Use Cases
 With the improvement of women’s economic ability and the variability of fashion demands, women’ shoes have become an important part of the footwear market as their demands for shoes increased. Some problems with meaningful business insights are brought to the attention of related parties, such as analysts, vendors and their customers: What is the average price of each distinct brand? Which brands have the highest prices? Which one has the widest distribution of prices? Is there a typical price distribution (e.g., normal) across brands or within specific brands? Is there an obvious difference in price between online and in store? The Shiny App of this project aimed to answer these questions and is used to determine brand markups, pricing strategies, and trends for luxury shoes.

@@ -206,16 +206,16 @@ ui <- fluidPage(
                                           column(3,
                                                  plotOutput("qqY")
                                           ),
-                                          column(6,
+                                          column(12,
                                                  plotOutput("SLRplot")
                                           ),
-                                          column(6,
+                                          column(4,
                                                  verbatimTextOutput("lm")
                                           ),
-                                          column(6,
+                                          column(4,
                                                  plotOutput("residual")
                                           ),
-                                          column(6,
+                                          column(4,
                                                  plotOutput("qq")
                                           )
                                  ) #fluidRow

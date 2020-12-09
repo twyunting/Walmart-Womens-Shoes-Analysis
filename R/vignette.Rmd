@@ -12,6 +12,7 @@ urlcolor: blue
 ---
 
 ### Please click [**HERE**](https://twyunting.shinyapps.io/WalmartWomenShoes/) to see the App
+
 ![](walmart.jpg)
 
 ### Programming Language and Development Resources

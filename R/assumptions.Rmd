@@ -1,0 +1,28 @@
+---
+title: "STAT assumptions"
+author: "Yunting Chiu"
+date: "12/3/2020"
+output: pdf_document
+---
+### Parametric Statistics
+Parametric statistics is a branch of statistics which assumes that sample data comes from a population that can be adequately modeled by a probability distribution that has a fixed set of parameters.
+
+#### Two-Samples T-test Assumptions 
+- We have two samples of independent observations from two distinct populations
+- The samples are independent
+- Both populations are normally distributed with unknown mean and standard deviation 
+- The standard deviations are equal
+
+#### Simple Linear Regression Assumptions 
+
+- Independent observation
+- Normally distribution
+- Equal variances
+- No influential outliers
+- Linear association between (mean) y and x. That is, residual : ri = yi - yhat i.
+
+
+![](../pics/slrTable.png)
+
+
+

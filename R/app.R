@@ -13,9 +13,9 @@ library(wordcloud2)
 library(tidytext)
 
 # Download data
-ws1 <- read_csv(file = "../data/Datafiniti_Womens_Shoes_Jun19.csv")
-ws2 <- read_csv(file = "../data/Datafiniti_Womens_Shoes.csv")
-ws3 <- read_csv(file = "../data/7003_1.csv")  
+ws1 <- read_csv(file = "Datafiniti_Womens_Shoes_Jun19.csv")
+ws2 <- read_csv(file = "Datafiniti_Womens_Shoes.csv")
+ws3 <- read_csv(file = "7003_1.csv")  
 
 # Clean and tidy dataset
 ws1 %>%
@@ -129,14 +129,14 @@ ws2015 %>%
 
 # input 
 ui <- fluidPage(
-    navbarPage("Walmart Women's Shoes Analysis",
+    navbarPage("Walmart Womens Shoes Analysis",
                windowTitle = "Walmart Women's Shoes Analysis",
                theme = shinytheme("cerulean")),
     tabsetPanel(type = "tabs",
                 # ----------------------------------
                 # tab panel 1 - Vignette
                 tabPanel("Vignette",
-                         includeMarkdown("../vignettes/vignette.rmd")
+                         includeMarkdown("vignette.Rmd")
                          ),
                 # ----------------------------------
                 # tab panel 2 - Descriptive Analysis by Date (Xubo and Jiarong)
@@ -185,9 +185,9 @@ ui <- fluidPage(
                                  checkboxInput("log", "Log Transformation"),
                                  checkboxInput("t", "T-Procedures"),
                                  checkboxInput("slr", "Simple Linear Regression"),
-                                 includeMarkdown("../vignettes/eda.rmd"),
+                                 includeMarkdown("eda.Rmd"),
                                  tableOutput("eda"),
-                                 includeMarkdown("../vignettes/assumptions.rmd"),
+                                 includeMarkdown("assumptions.Rmd"),
                                  width = 12
                              ),
                              mainPanel(
